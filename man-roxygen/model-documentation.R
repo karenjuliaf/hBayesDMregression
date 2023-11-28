@@ -13,7 +13,10 @@
 #'   a filepath for a tab-seperated txt file, \code{"example"} to use example data, or
 #'   \code{"choose"} to choose data with an interactive window.
 #'   Columns in the dataset must include:
-#'   <%= DATA_COLUMNS %>. See \bold{Details} below for more information.
+#'   <%= DATA_COLUMNS %> and additional covariates. Categorical covariates should be one-hot encoded
+#'   as 0s and 1s. See \bold{Details} below for more information.
+#' @param regression_pars The parameters of the model that should be used for regression, supplied
+#' as a character vector.
 #' @param niter Number of iterations, including warm-up. Defaults to 4000.
 #' @param nwarmup Number of iterations used for warm-up only. Defaults to 1000.
 #' @param nchain Number of Markov chains to run. Defaults to 4.
