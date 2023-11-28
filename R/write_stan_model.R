@@ -1,4 +1,5 @@
 #' @noRd
+#'
 write_stan_model <- function(model_name, regression_pars) {
   switch(
     model_name,
@@ -195,7 +196,7 @@ write_stan_model_orl_regression <- function(regression_pars) {
   non_regression_strings <- list(
     "Arew" = "Arew[i] = Phi_approx(mu_pr[1] + sigma[1] * Arew_pr[i]);",
     "Apun" = "Apun[i] = Phi_approx(mu_pr[2] + sigma[2] * Apun_pr[i]);",
-    "K" = "K[i]    = Phi_approx(mu_pr[3] + sigma[3] * K_pr[i]) * 5;",
+    "K" = "K[i] = Phi_approx(mu_pr[3] + sigma[3] * K_pr[i]) * 5;",
     "betaF" = "betaF = mu_pr[4] + sigma[4] * betaF_pr[i];",
     "betaP" = "betaP = mu_pr[5] + sigma[5] * betaP_pr[i];"
   )
@@ -446,7 +447,7 @@ write_stan_model_vpp_regression <- function(regression_pars) {
   non_regression_strings <- list(
     "Arew" = "Arew[i] = Phi_approx(mu_pr[1] + sigma[1] * Arew_pr[i]);",
     "Apun" = "Apun[i] = Phi_approx(mu_pr[2] + sigma[2] * Apun_pr[i]);",
-    "K" = "K[i]    = Phi_approx(mu_pr[3] + sigma[3] * K_pr[i]) * 5;",
+    "K" = "K[i] = Phi_approx(mu_pr[3] + sigma[3] * K_pr[i]) * 5;",
     "betaF" = "betaF = mu_pr[4] + sigma[4] * betaF_pr[i];",
     "betaP" = "betaP = mu_pr[5] + sigma[5] * betaP_pr[i];"
   )
