@@ -79,6 +79,7 @@
 #'   <% RETURN_REGRESSORS <- "\\item{modelRegressor}{List object containing the " %>
 #'   <% RETURN_REGRESSORS <- paste0(RETURN_REGRESSORS, "extracted model-based regressors.}") %>
 #'   <%= ifelse(!is.na("REGRESSORS"), RETURN_REGRESSORS, "") %>
+#'   \item{model_code}{The Stan code used to fit the model.}
 #' }
 #'
 #' @details
