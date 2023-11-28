@@ -189,15 +189,15 @@ write_stan_model_orl_regression <- function(regression_pars) {
     "Arew" = "Arew[i] = Phi_approx(mu_pr[1] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[1] * Arew_pr[i]);",
     "Apun" = "Apun[i] = Phi_approx(mu_pr[2] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[2] * Apun_pr[i]);",
     "K" = "K[i] = Phi_approx(mu_pr[3] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[3] * K_pr[i]) * 5;",
-    "betaF" = "betaF = mu_pr[4] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[4] * betaF_pr;",
-    "betaP" = "betaP = mu_pr[5] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[5] * betaP_pr;"
+    "betaF" = "betaF = mu_pr[4] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[4] * betaF_pr[i];",
+    "betaP" = "betaP = mu_pr[5] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[5] * betaP_pr[i];"
   )
   non_regression_strings <- list(
     "Arew" = "Arew[i] = Phi_approx(mu_pr[1] + sigma[1] * Arew_pr[i]);",
     "Apun" = "Apun[i] = Phi_approx(mu_pr[2] + sigma[2] * Apun_pr[i]);",
     "K" = "K[i]    = Phi_approx(mu_pr[3] + sigma[3] * K_pr[i]) * 5;",
-    "betaF" = "betaF = mu_pr[4] + sigma[4] * betaF_pr;",
-    "betaP" = "betaP = mu_pr[5] + sigma[5] * betaP_pr;"
+    "betaF" = "betaF = mu_pr[4] + sigma[4] * betaF_pr[i];",
+    "betaP" = "betaP = mu_pr[5] + sigma[5] * betaP_pr[i];"
   )
   non_regression_pars <- setdiff(names(regression_strings), regression_pars)
 
@@ -258,9 +258,10 @@ write_stan_model_orl_regression <- function(regression_pars) {
       {{main_chunk$Arew}}
       {{main_chunk$Apun}}
       {{main_chunk$K}}
+      {{main_chunk$betaF}}
+      {{main_chunk$betaP}}
     }
-    {{main_chunk$betaF}}
-    {{main_chunk$betaP}}
+
   }
   model {
     // Hyperparameters
@@ -439,15 +440,15 @@ write_stan_model_vpp_regression <- function(regression_pars) {
     "Arew" = "Arew[i] = Phi_approx(mu_pr[1] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[1] * Arew_pr[i]);",
     "Apun" = "Apun[i] = Phi_approx(mu_pr[2] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[2] * Apun_pr[i]);",
     "K" = "K[i] = Phi_approx(mu_pr[3] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[3] * K_pr[i]) * 5;",
-    "betaF" = "betaF = mu_pr[4] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[4] * betaF_pr;",
-    "betaP" = "betaP = mu_pr[5] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[5] * betaP_pr;"
+    "betaF" = "betaF = mu_pr[4] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[4] * betaF_pr[i];",
+    "betaP" = "betaP = mu_pr[5] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[5] * betaP_pr[i];"
   )
   non_regression_strings <- list(
     "Arew" = "Arew[i] = Phi_approx(mu_pr[1] + sigma[1] * Arew_pr[i]);",
     "Apun" = "Apun[i] = Phi_approx(mu_pr[2] + sigma[2] * Apun_pr[i]);",
     "K" = "K[i]    = Phi_approx(mu_pr[3] + sigma[3] * K_pr[i]) * 5;",
-    "betaF" = "betaF = mu_pr[4] + sigma[4] * betaF_pr;",
-    "betaP" = "betaP = mu_pr[5] + sigma[5] * betaP_pr;"
+    "betaF" = "betaF = mu_pr[4] + sigma[4] * betaF_pr[i];",
+    "betaP" = "betaP = mu_pr[5] + sigma[5] * betaP_pr[i];"
   )
   non_regression_pars <- setdiff(names(regression_strings), regression_pars)
 
@@ -516,21 +517,9 @@ write_stan_model_vpp_regression <- function(regression_pars) {
       {{main_chunk$lambda}}
       {{main_chunk$K}}
       {{main_chunk$w}}
-      /*
-      A[i]      = Phi_approx(mu_pr[1] + sigma[1] * A_pr[i]);
-      alpha[i]  = Phi_approx(mu_pr[2] + sigma[2] * alpha_pr[i]) * 2;
-      cons[i]   = Phi_approx(mu_pr[3] + sigma[3] * cons_pr[i]) * 5;
-      lambda[i] = Phi_approx(mu_pr[4] + sigma[4] * lambda_pr[i]) * 10;
-      K[i]      = Phi_approx(mu_pr[7] + sigma[7] * K_pr[i]);
-      w[i]      = Phi_approx(mu_pr[8] + sigma[8] * w_pr[i]);
-      */
+      {{main_chunk$epP}}
+      {{main_chunk$epN}}
     }
-    {{main_chunk$epP}}
-    {{main_chunk$epN}}
-    /*
-    epP = mu_pr[5] + sigma[5] * epP_pr;
-    epN = mu_pr[6] + sigma[6] * epN_pr;
-    */
   }
   model {
     // Hyperparameters
