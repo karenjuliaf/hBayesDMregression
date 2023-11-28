@@ -190,15 +190,15 @@ write_stan_model_orl_regression <- function(regression_pars) {
     "Arew" = "Arew[i] = Phi_approx(mu_pr[1] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[1] * Arew_pr[i]);",
     "Apun" = "Apun[i] = Phi_approx(mu_pr[2] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[2] * Apun_pr[i]);",
     "K" = "K[i] = Phi_approx(mu_pr[3] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[3] * K_pr[i]) * 5;",
-    "betaF" = "betaF = mu_pr[4] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[4] * betaF_pr[i];",
-    "betaP" = "betaP = mu_pr[5] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[5] * betaP_pr[i];"
+    "betaF" = "betaF[i] = mu_pr[4] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[4] * betaF_pr[i];",
+    "betaP" = "betaP[i] = mu_pr[5] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[5] * betaP_pr[i];"
   )
   non_regression_strings <- list(
     "Arew" = "Arew[i] = Phi_approx(mu_pr[1] + sigma[1] * Arew_pr[i]);",
     "Apun" = "Apun[i] = Phi_approx(mu_pr[2] + sigma[2] * Apun_pr[i]);",
     "K" = "K[i] = Phi_approx(mu_pr[3] + sigma[3] * K_pr[i]) * 5;",
-    "betaF" = "betaF = mu_pr[4] + sigma[4] * betaF_pr[i];",
-    "betaP" = "betaP = mu_pr[5] + sigma[5] * betaP_pr[i];"
+    "betaF" = "betaF[i] = mu_pr[4] + sigma[4] * betaF_pr[i];",
+    "betaP" = "betaP[i] = mu_pr[5] + sigma[5] * betaP_pr[i];"
   )
   non_regression_pars <- setdiff(names(regression_strings), regression_pars)
 
@@ -262,7 +262,6 @@ write_stan_model_orl_regression <- function(regression_pars) {
       {{main_chunk$betaF}}
       {{main_chunk$betaP}}
     }
-
   }
   model {
     // Hyperparameters
@@ -438,18 +437,24 @@ write_stan_model_orl_regression <- function(regression_pars) {
 
 write_stan_model_vpp_regression <- function(regression_pars) {
   regression_strings <- list(
-    "Arew" = "Arew[i] = Phi_approx(mu_pr[1] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[1] * Arew_pr[i]);",
-    "Apun" = "Apun[i] = Phi_approx(mu_pr[2] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[2] * Apun_pr[i]);",
-    "K" = "K[i] = Phi_approx(mu_pr[3] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[3] * K_pr[i]) * 5;",
-    "betaF" = "betaF = mu_pr[4] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[4] * betaF_pr[i];",
-    "betaP" = "betaP = mu_pr[5] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[5] * betaP_pr[i];"
+    "A" = "A[i] = Phi_approx(mu_pr[1] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[1] * A_pr[i]);",
+    "alpha" = "alpha[i] = Phi_approx(mu_pr[2] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[2] * alpha_pr[i]) * 2;",
+    "cons" = "cons[i] = Phi_approx(mu_pr[3] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[3] * cons_pr[i]) * 5;",
+    "lambda" = "lambda[i] = Phi_approx(mu_pr[4] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[4] * lambda_pr[i]) * 10;",
+    "K" = "K[i] = Phi_approx(mu_pr[7] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[7] * K_pr[i]);",
+    "w" = "w[i] = Phi_approx(mu_pr[8] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[8] * w_pr[i]);",
+    "epP" = "epP[i] = mu_pr[5] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[5] * epP_pr[i];",
+    "epN" = "epN[i] = mu_pr[6] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[6] * epN_pr[i];"
   )
   non_regression_strings <- list(
-    "Arew" = "Arew[i] = Phi_approx(mu_pr[1] + sigma[1] * Arew_pr[i]);",
-    "Apun" = "Apun[i] = Phi_approx(mu_pr[2] + sigma[2] * Apun_pr[i]);",
-    "K" = "K[i] = Phi_approx(mu_pr[3] + sigma[3] * K_pr[i]) * 5;",
-    "betaF" = "betaF = mu_pr[4] + sigma[4] * betaF_pr[i];",
-    "betaP" = "betaP = mu_pr[5] + sigma[5] * betaP_pr[i];"
+    "A" = "A[i] = Phi_approx(mu_pr[1] + sigma[1] * A_pr[i]);",
+    "alpha" = "alpha[i] = Phi_approx(mu_pr[2] + sigma[2] * alpha_pr[i]) * 2;",
+    "cons" = "cons[i] = Phi_approx(mu_pr[3] + sigma[3] * cons_pr[i]) * 5;",
+    "lambda" = "lambda[i] = Phi_approx(mu_pr[4] + sigma[4] * lambda_pr[i]) * 10;",
+    "K" = "K[i] = Phi_approx(mu_pr[7] + sigma[7] * K_pr[i]);",
+    "w" = "w[i] = Phi_approx(mu_pr[8] + sigma[8] * w_pr[i]);",
+    "epP" = "epP[i] = mu_pr[5] + sigma[5] * epP_pr[i];",
+    "epN" = "epN[i] = mu_pr[6] + sigma[6] * epN_pr[i];"
   )
   non_regression_pars <- setdiff(names(regression_strings), regression_pars)
 
