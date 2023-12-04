@@ -1,5 +1,5 @@
 #' @noRd
-#'
+
 write_stan_model <- function(model_name, regression_pars) {
   switch(
     model_name,
