@@ -1,5 +1,5 @@
 #' @templateVar MODEL_FUNCTION igt_pvl_decay_regression
-#' @templateVar CONTRIBUTOR
+#' @templateVar CONTRIBUTOR NA
 #' @templateVar TASK_NAME Iowa Gambling Task
 #' @templateVar TASK_CODE igt
 #' @templateVar TASK_CITE (Ahn et al., 2008)
@@ -9,7 +9,7 @@
 #' @templateVar MODEL_TYPE Hierarchical
 #' @templateVar DATA_COLUMNS "subjID", "choice", "gain", "loss"
 #' @templateVar PARAMETERS \code{A} (decay rate), \code{alpha} (outcome sensitivity), \code{cons} (response consistency), \code{lambda} (loss aversion)
-#' @templateVar REGRESSORS
+#' @templateVar REGRESSORS NA
 #' @templateVar POSTPREDS "y_pred"
 #' @templateVar LENGTH_DATA_COLUMNS 4
 #' @templateVar DETAILS_DATA_1 \item{subjID}{A unique identifier for each subject in the data-set.}
@@ -24,7 +24,10 @@
 #' @export
 #' @include hBayesDM_model_regression.R
 #' @include preprocess_funcs.R
-
+#'
+#' @details
+#' Here is some manual information, let's see if it works.
+#'
 #' @references
 #' Ahn, W. Y., Busemeyer, J. R., & Wagenmakers, E. J. (2008). Comparison of decision learning models using the generalization criterion method. Cognitive Science, 32(8), 1376-1402. https://doi.org/10.1080/03640210802352992
 #'
