@@ -1,5 +1,5 @@
 #' @templateVar MODEL_FUNCTION igt_vpp_regression
-#' @templateVar CONTRIBUTOR
+#' @templateVar CONTRIBUTOR NA
 #' @templateVar TASK_NAME Iowa Gambling Task
 #' @templateVar TASK_CODE igt
 #' @templateVar TASK_CITE (Ahn et al., 2008)
@@ -9,7 +9,7 @@
 #' @templateVar MODEL_TYPE Hierarchical
 #' @templateVar DATA_COLUMNS "subjID", "choice", "gain", "loss"
 #' @templateVar PARAMETERS \code{A} (learning rate), \code{alpha} (outcome sensitivity), \code{cons} (response consistency), \code{lambda} (loss aversion), \code{epP} (gain impact), \code{epN} (loss impact), \code{K} (decay rate), \code{w} (RL weight)
-#' @templateVar REGRESSORS
+#' @templateVar REGRESSORS NA
 #' @templateVar POSTPREDS "y_pred"
 #' @templateVar LENGTH_DATA_COLUMNS 4
 #' @templateVar DETAILS_DATA_1 \item{subjID}{A unique identifier for each subject in the data-set.}
@@ -32,7 +32,7 @@
 #'
 
 
-igt_vpp <- hBayesDM_model_regression(
+igt_vpp_regression <- hBayesDM_model_regression(
   task_name       = "igt",
   model_name      = "vpp_regression",
   model_type      = "",
