@@ -46,21 +46,21 @@ igt_regression_preprocess_func <- function(raw_data, general_info, regression_pa
   are_factors <- covariate_matrix[, lapply(.SD, as.factor)]
   are_factors <- are_factors[, lapply(.SD, nlevels)]
   are_factors <- are_factors[, lapply(.SD, function(x) {x <= 2})]
-  are_factors <- setNames(as.logical(are_factors), names(are_factors))
+  are_factors <- stats::setNames(as.logical(are_factors), names(are_factors))
 
   # For non-factor covariates, we can calculate their standard deviations as usual
   # For factor covariates, we set their standard deviations to 1
   if (all(!are_factors)) {
-    covariate_sds <- covariate_matrix[, lapply(.SD, sd)]
-    covariate_sds <- setNames(as.numeric(covariate_sds), names(covariate_sds))
+    covariate_sds <- covariate_matrix[, lapply(.SD, stats::sd)]
+    covariate_sds <- stats::setNames(as.numeric(covariate_sds), names(covariate_sds))
   } else {
-    non_factor_sds <- covariate_matrix[, lapply(.SD, sd), .SDcols=!are_factors]
+    non_factor_sds <- covariate_matrix[, lapply(.SD, stats::sd), .SDcols=!are_factors]
     non_factor_sds <- as.numeric(non_factor_sds)
 
     covariate_sds <- numeric(ncol(covariate_matrix))
     covariate_sds[are_factors] <- 1
     covariate_sds[covariate_sds != 1] <- non_factor_sds
-    covariate_sds <- setNames(covariate_sds, colnames(covariate_matrix))
+    covariate_sds <- stats::setNames(covariate_sds, colnames(covariate_matrix))
   }
 
   covariate_matrix <- as.matrix(covariate_matrix)
