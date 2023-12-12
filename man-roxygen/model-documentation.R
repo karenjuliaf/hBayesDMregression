@@ -83,7 +83,9 @@
 #' }
 #'
 #' @details
-#' This section describes some of the function arguments in greater detail.
+#' This section describes some of the function arguments in greater detail. For additional
+#' mathematical details, see the Introduction vignette by calling
+#' \code{vignette("introduction", package="hBayesDMregression")}.
 #'
 #' \strong{data} should be assigned a character value specifying the full path and name (including
 #'   extension information, e.g. ".txt") of the file that contains the behavioral data-set of all
@@ -103,10 +105,8 @@
 #'   <%= get0("DETAILS_DATA_8") %>
 #'   <%= get0("DETAILS_DATA_9") %>
 #' }
-#' \strong{*}Note: The file may contain other columns of data (e.g. "ReactionTime", "trial_number",
-#'   etc.), but only the data within the column names listed above will be used during the modeling.
-#'   As long as the necessary columns mentioned above are present and labeled correctly, there is no
-#'   need to remove other miscellaneous data columns.
+#' \strong{*}Note: Unlike the \code{hBayesDM} package, all additional columns of the supplied data
+#'   will be used. Therefore, unwanted columns should be removed beforehand.
 #'
 #' \strong{nwarmup} is a numerical value that specifies how many MCMC samples should not be stored
 #'   upon the beginning of each chain. For those familiar with Bayesian methods, this is equivalent
@@ -137,10 +137,6 @@
 #'   description of these arguments.
 #'
 #' <%= ifelse(!is.na(CONTRIBUTOR), paste0("\\subsection{Contributors}{", CONTRIBUTOR, "}"), "") %>
-#'
-#' @seealso
-#' We refer users to our in-depth tutorial for an example of using hBayesDM:
-#'   \url{https://rpubs.com/CCSL/hBayesDM}
 #'
 #' @examples
 #' \dontrun{
