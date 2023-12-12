@@ -1,0 +1,239 @@
+---
+title: "Introduction"
+output:
+  rmarkdown::html_vignette:
+    math_method: "katex"
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "##"
+)
+```
+
+# `igt_pvl_decay_regression()`
+
+For each subject, indexed by $i \,=\, 1,\,\ldots,\,n$, there are four parameters:
+
+1. $A_{i}$: decay rate.
+
+2. $\alpha_{i}$: outcome sensitivity.
+
+3. $c_{i}$: response consistency.
+
+4. $\lambda_{i}$: loss aversion.
+
+The raw, untransformed parameters are denoted with the subscript $\text{pr}$ with priors given by:
+
+\[A_{\text{pr},\,i},\,\alpha_{\text{pr},\,i},\,c_{\text{pr},\,i},\,\lambda_{\text{pr},\,i}
+\,\stackrel{\text{iid}}{\sim}\, N(0,1).\]
+
+There are eight hyperparameters (group parameters), two for each of the subject-level parameters,
+$A$, $\alpha$, $c$, and $\lambda$:
+
+\[\mu_{A},\,\mu_{\alpha},\,\mu_{c},\,\mu_{\lambda} \,\stackrel{\text{iid}}{\sim}\, N(0,1)\]
+\[\sigma_{A},\,\sigma_{\alpha},\,\sigma_{c},\,\sigma_{\lambda} \,\stackrel{\text{iid}}{\sim}\, TN(0,\,0.2^{2},\, 0),\]
+
+where $TN(\mu,\,\sigma^{2},\,a)$ denotes the truncated normal distribution with lower bound $a$.
+
+(The following focuses only on the subject-level parameter $A_{i}$, but a similar procedure is
+applied to the remaining subject-level parameters when supplied to the `regression_pars` argument of
+`igt_pvl_decay_regression()`.)
+
+The transformed parameters are obtained by performing the Matt trick -- the untransformed parameter
+is scaled by the respective standard deviation parameter, offset by the respective mean parameter,
+and passed through the inverse probit function (standard normal cdf):
+
+\[A_{i} \,=\, \Phi(\mu_{A} \,+\, A_{\text{pr},\,i}\,\sigma_{A})\]
+
+## Adding covariates
+
+Suppose there are $j$ covariates of interest. Instead of using a standard normal prior for
+$\mu_{A}$ (as in `hBayesDM`), we first propose that $\mu_{A}$ can be rewritten as:
+
+\[\mu_{A} \,=\, \beta_{A,\,0} \,+\, \beta_{A,\,1}X_{1} \,+\, \ldots \,+\,\beta_{A,\,j}X_{j}.\]
+
+We then declare the following priors:
+
+\[\beta_{A,\,0} \,\sim\, N(0,1)\]
+
+\[\beta_{A,\,1}\,|\,\sigma_{1} \,\sim\, N(0,\,\sigma^{2}_{1})\]
+\[\sigma_{1} \,\sim\, \text{Exp}(1/s_{X_{1}}),\]
+
+\[\vdots\]
+
+\[\beta_{A,\,j}\,|\,\sigma_{j} \,\sim\, N(0,\,\sigma^{2}_{j})\]
+\[\sigma_{j} \,\sim\, \text{Exp}(1/s_{X_{j}}),\]
+
+where $s_{X_{i}}$ is either the standard deviation of the $j^{\text{th}}$ covariate's values if
+$X_{j}$ is continuous, or is equal to 1 if the $j^{\text{th}}$ covariate is one-hot encoded.
+
+Reusing the prior of $\sigma_{A}$ from above:
+
+\[\sigma_{A} \,\sim\, TN(0,\,0.2^{2},\,0),\]
+
+the Matt trick is used to induce a new prior on $A_{i}$:
+\begin{align*}
+A_{i} &\,=\, \Phi(\mu_{A} \,+\, A_{\text{pr},\,i}\,\sigma_{A})\\[3mm]
+&\,=\, \Phi(\beta_{A,\,0} \,+\, \beta_{A,\,1}X_{1} \,+\, \ldots \,+\, \beta_{A,\,j}X_{j} \,+\,
+A_{\text{pr},\,i}\,\sigma_{A})
+\end{align*}
+
+# `igt_orl_regression()`
+
+For each subject, indexed by $i \,=\, 1,\,\ldots,\,n$, there are five parameters:
+
+1. $A_{\text{rew},\,i}$: reward learning rate.
+
+2. $A_{\text{pun},\,i}$: punishment learning rate.
+
+3. $K_{i}$: perseverance decay.
+
+4. $\beta_{F,\,i}$: outcome frequency weight.
+
+5. $\beta_{P,\,i}$: perseverance weight.
+
+The raw, untransformed parameters are denoted with the subscript $\text{pr}$ with priors given by:
+
+\[A_{\text{rew},\,\text{pr},\,i},\,A_{\text{pun},\,\text{pr},\,i},\,K_{\text{pr},\,i},\,
+\beta_{F,\,\text{pr},\,i},\,\beta_{P,\,\text{pr},\,i} \,\stackrel{\text{iid}}{\sim}\, N(0,1)\]
+
+There are ten hyperparameters (group parameters), two for each of the subject-level parameters,
+$A_{\text{rew}}$, $A_{\text{pun}}$, $K$, $\beta_{F}$, $\beta_{P}$:
+
+\[\mu_{A_{\text{rew}}},\,\mu_{A_{\text{pun}}},\,\mu_{K},\,\mu_{\beta_{F}},\,\mu_{\beta_{P}}
+\,\stackrel{\text{iid}}{\sim}\, N(0,1)\]
+\[\sigma_{A_{\text{rew}}},\,\sigma_{A_{\text{pun}}},\,\sigma_{K} \,\stackrel{\text{iid}}{\sim}\,
+TN(0,\,0.2^{2},\,0)\]
+\[\sigma_{\beta_{F}},\,\sigma_{\beta_{P}} \,\stackrel{\text{iid}}{\sim}\, \text{Cauchy}(0,1),\]
+
+where $TN(\mu,\,\sigma^{2},\,a)$ denotes the truncated normal distribution with lower bound $a$.
+
+(The following focuses only on the subject-level parameter $K_{i}$, but a similar procedure is
+applied to the remaining subject-level parameters when supplied to the `regression_pars` argument of
+`igt_orl_regression()`.)
+
+The transformed parameters are obtained by performing the Matt trick -- the untransformed parameter
+is scaled by the respective standard deviation parameter, offset by the respective mean parameter,
+and passed through the inverse probit function (standard normal cdf):
+
+\[K_{i} \,=\, \Phi(\mu_{K} \,+\, K_{\text{pr},\,i}\,\sigma_{K})\]
+
+## Adding covariates
+
+Suppose there are $j$ covariates of interest. Instead of using a standard normal prior for $\mu_{K}$
+(as in `hBayesDM`), we first propose that $\mu_{K}$ can be rewritten as:
+
+\[\mu_{K} \,=\, \beta_{K,\,0} \,+\, \beta_{K,\,1}X_{1} \,+\, \ldots \,+\, \beta_{K,\,j}X_{j}.\]
+
+We then declare the following priors:
+
+\[\beta_{K,\,0} \,\sim\, N(0,1)\]
+
+\[\beta_{K,\,1}\,|\,\sigma_{1} \,\sim\, N(0,\,\sigma^{2}_{1})\]
+\[\sigma_{1} \,\sim\, \text{Exp}(1/s_{X_{1}}),\]
+
+\[\vdots\]
+
+\[\beta_{K,\,j}\,|\,\sigma_{j} \,\sim\, N(0,\,\sigma^{2}_{j})\]
+\[\sigma_{j} \,\sim\, \text{Exp}(1/s_{X_{j}}),\]
+
+where $s_{X_{i}}$ is either the standard deviation of the $j^{\text{th}}$ covariate's values if
+$X_{j}$ is continuous, or is equal to 1 if the $j^{\text{th}}$ covariate is one-hot encoded.
+
+Reusing the prior of $\sigma_{K}$ from above:
+
+\[\sigma_{K} \,\sim\, TN(0,\,0.2^{2},\,0),\]
+
+the Matt trick is used to induce a new prior on $K_{i}$:
+\begin{align*}
+K_{i} &\,=\, \Phi(\mu_{K} \,+\, K_{\text{pr},\,i}\,\sigma_{K})\\[3mm]
+&\,=\, \Phi(\beta_{K,\,0} \,+\, \beta_{K,\,1}X_{1} \,+\, \ldots \,+\, \beta_{K,\,j}X_{j} \,+\,
+K_{\text{pr},\,i}\,\sigma_{K})
+\end{align*}
+
+# `igt_vpp_regression()`
+
+For each subject, indexed by $i \,=\, 1,\,\ldots,\,n$, there are eight parameters:
+
+1. $A_{i}$: learning rate.
+
+2. $\alpha_{i}$: outcome sensitivity.
+
+3. $c_{i}$: response consistency.
+
+4. $\lambda_{i}$: loss aversion.
+
+5. $\varepsilon_{\text{pos},\,i}$: gain impact.
+
+6. $\varepsilon_{\text{neg},\,i}$: loss impact.
+
+7. $K_{i}$: decay rate.
+
+8. $w_{i}$: reinforcement learning weight.
+
+The raw, untransformed parameters are denoted with the subscript $\text{pr}$ with priors given by:
+
+\[A_{\text{pr},\,i},\,\alpha_{\text{pr},\,i},\,c_{\text{pr},\,i},\,\lambda_{\text{pr},\,i},\,
+\varepsilon_{\text{pos},\,\text{pr},\,i},\,\varepsilon_{\text{neg},\,\text{pr},\,i},\,
+K_{\text{pr},\,i},\,w_{\text{pr},\,i} \,\stackrel{\text{iid}}{\sim}\, N(0,1)\]
+
+There are 14 hyperparameters (group parameters), two for each of the subject-level parameters $A$,
+$\alpha$, $c$, $\lambda$, $\varepsilon_{\text{pos}}$, $\varepsilon_{\text{neg}}$, $K$, $w$:
+
+\[\mu_{A},\,\mu_{\alpha},\,\mu_{c},\,\mu_{\lambda},\,\mu_{\varepsilon_{\text{pos}}},\,
+\mu_{\varepsilon_{\text{neg}}},\,\mu_{K},\,\mu_{w} \,\stackrel{\text{iid}}{\sim}\, N(0,1)\]
+\[\sigma_{A},\,\sigma_{\alpha},\,\sigma_{c},\,\sigma_{\lambda},\,\sigma_{K},\,\sigma_{w}
+\,\stackrel{\text{iid}}{\sim}\, TN(0,\,0.2^{2},\,0)\]
+\[\sigma_{\varepsilon_{\text{pos}}},\,\sigma_{\varepsilon_{\text{neg}}} \,\stackrel{\text{iid}}{\sim}
+\,\text{Cauchy}(0,1),\]
+
+where $TN(\mu,\,\sigma^{2},\,a)$ denotes the truncated normal distribution with lower bound $a$.
+
+(The following focuses only on the subject-level parameter $A_{i}$, but a similar procedure is
+applied to the remaining subject-level parameters when supplied to the `regression_pars` argument
+of `igt_vpp_regression()`.)
+
+The transformed parameters are obtained by performing the Matt trick -- the untransformed parameter
+is scaled by the respective standard deviation parameter, offset by the respective mean parameter,
+and passed through the inverse probit function (standard normal cdf):
+
+\[A_{i} \,=\, \Phi(\mu_{A} \,+\, A_{\text{pr},\,i}\,\sigma_{A})\]
+
+## Adding covariates
+
+Suppose there are $j$ covariates of interest. Instead of using a standard normal prior for
+$\mu_{A}$ (as in `hBayesDM`), we first propose that $\mu_{A}$ can be rewritten as:
+
+\[\mu_{A} \,=\, \beta_{A,\,0} \,+\, \beta_{A,\,1}X_{1} \,+\, \ldots \,+\,\beta_{A,\,j}X_{j}.\]
+
+We then declare the following priors:
+
+\[\beta_{A,\,0} \,\sim\, N(0,1)\]
+
+\[\beta_{A,\,1}\,|\,\sigma_{1} \,\sim\, N(0,\,\sigma^{2}_{1})\]
+\[\sigma_{1} \,\sim\, \text{Exp}(1/s_{X_{1}}),\]
+
+\[\vdots\]
+
+\[\beta_{A,\,j}\,|\,\sigma_{j} \,\sim\, N(0,\,\sigma^{2}_{j})\]
+\[\sigma_{j} \,\sim\, \text{Exp}(1/s_{X_{j}}),\]
+
+where $s_{X_{i}}$ is either the standard deviation of the $j^{\text{th}}$ covariate's values if
+$X_{j}$ is continuous, or is equal to 1 if the $j^{\text{th}}$ covariate is one-hot encoded.
+
+Reusing the prior of $\sigma_{A}$ from above:
+
+\[\sigma_{A} \,\sim\, TN(0,\,0.2^{2},\,0),\]
+
+the Matt trick is used to induce a new prior on $A_{i}$:
+\begin{align*}
+A_{i} &\,=\, \Phi(\mu_{A} \,+\, A_{\text{pr},\,i}\,\sigma_{A})\\[3mm]
+&\,=\, \Phi(\beta_{A,\,0} \,+\, \beta_{A,\,1}X_{1} \,+\, \ldots \,+\, \beta_{A,\,j}X_{j} \,+\,
+A_{\text{pr},\,i}\,\sigma_{A})
+\end{align*}
