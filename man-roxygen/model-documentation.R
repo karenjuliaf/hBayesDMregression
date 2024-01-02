@@ -13,8 +13,7 @@
 #'   a filepath for a tab-seperated txt file, \code{"example"} to use example data, or
 #'   \code{"choose"} to choose data with an interactive window.
 #'   Columns in the dataset must include:
-#'   <%= DATA_COLUMNS %> and additional covariates. Categorical covariates should be one-hot encoded
-#'   as 0s and 1s. See \bold{Details} below for more information.
+#'   <%= DATA_COLUMNS %> and additional covariates. See \bold{Details} below for more information.
 #' @param regression_pars The parameters of the model that should be used for regression, supplied
 #' as a character vector.
 #' @param niter Number of iterations, including warm-up. Defaults to 4000.
@@ -66,7 +65,7 @@
 #'     <%= get0("ADDITIONAL_ARGS_9") %>
 #'   <%= ifelse(as.integer(LENGTH_ADDITIONAL_ARGS) > 0, "}", "") %>
 #'
-#' @return A class "hBayesDM" object \code{modelData} with the following components:
+#' @return An object of class "hBayesDMregression" with the following components:
 #' \describe{
 #'   \item{model}{Character value that is the name of the model (\\code{"<%= MODEL_FUNCTION %>"}).}
 #'   \item{allIndPars}{Data.frame containing the summarized parameter values (as specified by
@@ -74,12 +73,13 @@
 #'   \item{parVals}{List object containing the posterior samples over different parameters.}
 #'   \item{fit}{A class \code{\link[rstan]{stanfit}} object that contains the fitted Stan
 #'     model.}
-#'   \item{rawdata}{Data.frame containing the raw data used to fit the model, as specified by
-#'     the user.}
+#'   \item{rawdata}{The raw data used to fit the model, as supplied by the user, returned as a
+#'     \code{data.frame} object.}
 #'   <% RETURN_REGRESSORS <- "\\item{modelRegressor}{List object containing the " %>
 #'   <% RETURN_REGRESSORS <- paste0(RETURN_REGRESSORS, "extracted model-based regressors.}") %>
 #'   <%= ifelse(!is.na("REGRESSORS"), RETURN_REGRESSORS, "") %>
-#'   \item{model_code}{The Stan code used to fit the model.}
+#'   \item{model_code}{The Stan code used to fit the model. The Stan code can be printed nicely by
+#'     wrapping it with \code{cat()}.}
 #' }
 #'
 #' @details
@@ -107,6 +107,11 @@
 #' }
 #' \strong{*}Note: Unlike the \code{hBayesDM} package, all additional columns of the supplied data
 #'   will be used. Therefore, unwanted columns should be removed beforehand.
+#'
+#' Categorical covariates should be one-hot encoded as 0s and 1s. See the \code{\link{igt_example}}
+#' data set for an example of one-hot encoded covariates. A categorical covariate can be one-hot
+#' encoded by following the code in
+#' \href{https://gist.github.com/adamoshen/7cb505c485dc88508d23d03decb2fc84}{this example}.
 #'
 #' \strong{nwarmup} is a numerical value that specifies how many MCMC samples should not be stored
 #'   upon the beginning of each chain. For those familiar with Bayesian methods, this is equivalent
