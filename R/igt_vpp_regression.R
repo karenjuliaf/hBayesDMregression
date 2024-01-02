@@ -22,7 +22,7 @@
 #' @template model-documentation
 #'
 #' @export
-#' @include hBayesDM_model_regression.R
+#' @include hBayesDMregression_model.R
 #' @include preprocess_funcs.R
 
 #' @references
@@ -32,7 +32,7 @@
 #'
 
 
-igt_vpp_regression <- hBayesDM_model_regression(
+igt_vpp_regression <- hBayesDMregression_model(
   task_name       = "igt",
   model_name      = "vpp_regression",
   model_type      = "",
