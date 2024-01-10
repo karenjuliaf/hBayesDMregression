@@ -68,6 +68,7 @@
 #' @return An object of class "hBayesDMregression" with the following components:
 #' \describe{
 #'   \item{model}{Character value that is the name of the model (\\code{"<%= MODEL_FUNCTION %>"}).}
+#'   \item{modelPars}{Character vector indicating the parameters of the task model.}
 #'   \item{allIndPars}{Data.frame containing the summarized parameter values (as specified by
 #'     \code{indPars}) for each subject.}
 #'   \item{parVals}{List object containing the posterior samples over different parameters.}
@@ -153,15 +154,17 @@
 #' output <- <%= MODEL_FUNCTION %>(
 #'   data = "example", niter = 2000, nwarmup = 1000, nchain = 4, ncore = 4)
 #'
-#' # Visually check convergence of the sampling chains (should look like 'hairy caterpillars')
-#' plot(output, type = "trace")
+#' # Preview posterior samples of the regression coefficients; a matrix with dimension
+#' # (niter - nwarmup) x (# of covariates)
+#' head(output$parVals$beta)
 #'
-#' # Check Rhat values (all Rhat values should be less than or equal to 1.1)
-#' rhat(output)
+#' # Preview posterior samples of the sigmas corresponding to the regression coefficients; same
+#' # dimension as previous matrix
+#' head(output$parVals$sigma_beta)
 #'
-#' # Plot the posterior distributions of the hyper-parameters (distributions should be unimodal)
-#' plot(output)
+#' # View Stan code used to fit the model
+#' cat(output$model_code)
 #'
-#' # Show the WAIC and LOOIC model fit estimates
-#' printFit(output)
+#' # For visual diagnostics, see the plotting vignette:
+#' # vignette(plotting, package="hBayesDMregression")
 #' }
