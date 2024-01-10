@@ -12,14 +12,10 @@
 #' \item{choice}{The number of the deck chosen}
 #' \item{gain,loss}{The gain(s) and/or loss(es) associated with the choice}
 #' \item{age}{Age of the subject}
-#' \item{vmPFC}{Ventromedial prefrontal cortex}
-#' \item{vmPFC_area}{Area of the subject's vmPFC}
-#' \item{dlPFC}{Dorsolateral prefrontal cortex}
-#' \item{dlPFC_area}{Area of the subject's dorsolateral prefrontal cortex}
+#' \item{x1,x2,x3,x4}{Continuous covariates}
 #' \item{sex}{Binary indicator of the subject's sex; 0 = female, 1 = male}
-#' \item{psychosis1}{Binary indicator of the presence of something; 0 = no, 1 = yes}
-#' \item{psychosis2}{Binary indicator of the presence of something; 0 = no, 1 = yes}
-#' \item{psychosis3}{Binary indicator of the presence of something; 0 = no, 1 = yes}
+#' \item{cond1,cond2,cond3}{One-hot encoded categorical covariate indicating presence of one of
+#'   three conditions}
 #' }
 #'
 #' @seealso The
