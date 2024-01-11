@@ -534,8 +534,8 @@ hBayesDMregression_model <- function(task_name,
 
     for (i in 1:length(fit@sim$samples)) {
       # Modify the order of `beta`s and `sigma_beta`s in the samples
-      other_par_names <- names(fit@sim$samples[[i]])[!grepl("^beta|^sigma_beta|^log_lik|^lp__", names(fit@sim$samples[[i]]))]
-      beta_names <- sort(names(fit@sim$samples[[i]])[grepl("^beta", names(fit@sim$samples[[i]]))])
+      other_par_names <- names(fit@sim$samples[[i]])[!grepl("^beta\\[|^sigma_beta|^log_lik|^lp__", names(fit@sim$samples[[i]]))]
+      beta_names <- sort(names(fit@sim$samples[[i]])[grepl("^beta\\[", names(fit@sim$samples[[i]]))])
       sigma_beta_names <- sort(names(fit@sim$samples[[i]])[grepl("^sigma_beta", names(fit@sim$samples[[i]]))])
       lik_names <- names(fit@sim$samples[[i]])[grepl("^log_lik|^lp__", names(fit@sim$samples[[i]]))]
       fit@sim$samples[[i]] <- fit@sim$samples[[i]][c(other_par_names, beta_names, sigma_beta_names, lik_names)]
