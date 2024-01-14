@@ -5,6 +5,7 @@
 #' [`hBayesDM::hBayesDM_model()`] function.
 #'
 #' @keywords internal
+#' @import hBayesDM
 #'
 #' @param task_name Character value for name of task. E.g. \code{"gng"}.
 #' @param model_name Character value for name of model. E.g. \code{"m1"}.
@@ -192,13 +193,13 @@ hBayesDMregression_model <- function(task_name,
     }
 
     # Remove only the rows containing NAs in necessary columns
-    complete_rows       <- complete.cases(raw_data[, insensitive_data_columns, with = FALSE])
+    complete_rows       <- stats::complete.cases(raw_data[, insensitive_data_columns, with = FALSE])
     sum_incomplete_rows <- sum(!complete_rows)
     if (sum_incomplete_rows > 0) {
       raw_data <- raw_data[complete_rows, ]
       cat("\n")
       cat("The following lines of the data file have NAs in necessary columns:\n")
-      cat(paste0(head(which(!complete_rows), 100) + 1, collapse = ", "))
+      cat(paste0(utils::head(which(!complete_rows), 100) + 1, collapse = ", "))
       if (sum_incomplete_rows > 100) {
         cat(", ...")
       }
@@ -448,7 +449,7 @@ hBayesDMregression_model <- function(task_name,
             } else if (is.infinite(ub)) {
               primes[i] <- log(inits[i] - lb)                   # (  lb, Inf)
             } else {
-              primes[i] <- qnorm((inits[i] - lb) / (ub - lb))   # (  lb,  ub)
+              primes[i] <- stats::qnorm((inits[i] - lb) / (ub - lb))   # (  lb,  ub)
             }
           }
           group_level             <- list(mu_pr = primes,
@@ -494,7 +495,7 @@ hBayesDMregression_model <- function(task_name,
     }
 
     # Define measurement of individual parameters
-    measure_indPars <- switch(indPars, mean = mean, median = median, mode = estimate_mode)
+    measure_indPars <- switch(indPars, mean = mean, median = stats::median, mode = hBayesDM::estimate_mode)
 
     # Define which individual parameters to measure
     which_indPars <- names(parameters)
