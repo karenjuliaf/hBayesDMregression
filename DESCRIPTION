@@ -18,12 +18,15 @@ Imports:
     glue,
     rstan
 Suggests: 
+    dplyr,
     ggplot2 (>= 3.4.0),
     katex,
     knitr,
     patchwork,
     purrr,
-    rmarkdown
+    rmarkdown,
+    tibble,
+    tidyr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
