@@ -63,6 +63,14 @@ igt_regression_preprocess_func <- function(raw_data, general_info, regression_pa
     covariate_sds <- stats::setNames(covariate_sds, colnames(covariate_matrix))
   }
 
+  # Before converting to matrix, convert all factors to numeric, as per details in
+  # `data.table:::as.matrix.data.table`, otherise a character matrix will be returned
+  true_factor_columns <- sapply(covariate_matrix, class)
+  true_factor_columns <- names(true_factor_columns)[true_factor_columns]
+  if (length(true_factor_columns > 1)) {
+    covariate_matrix <- covariate_matrix[, lapply(.SD, function(x) as.numeric(as.character(x))), .SDcols=true_factor_columns]
+  }
+
   covariate_matrix <- as.matrix(covariate_matrix)
   covariate_precisions <- 1 / covariate_sds
   covariate_precisions <- matrix(
