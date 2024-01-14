@@ -14,6 +14,7 @@
 #'   `"choose"` to choose data with an interactive window.
 #'   Columns in the dataset must include:
 #'   <%= DATA_COLUMNS %> and additional covariates. See \bold{Details} below for more information.
+#' @param exclude_cols A character vector of data columns to exclude from analysis.
 #' @param regression_pars The parameters of the model that should be used for regression, supplied
 #' as a character vector.
 #' @param niter Number of iterations, including warm-up. Defaults to 4000.

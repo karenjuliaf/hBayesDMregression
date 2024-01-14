@@ -106,21 +106,22 @@ hBayesDMregression_model <- function(task_name,
                                       preprocess_func) {
 
   # The resulting hBayesDMregression model function to be returned
-  function(data           = NULL,
-           regression_pars,
-           niter          = 4000,
-           nwarmup        = 1000,
-           nchain         = 4,
-           ncore          = 1,
-           nthin          = 1,
-           inits          = "vb",
-           indPars        = "mean",
-           modelRegressor = FALSE,
-           vb             = FALSE,
-           inc_postpred   = FALSE,
-           adapt_delta    = 0.95,
-           stepsize       = 1,
-           max_treedepth  = 10,
+  function(data            = NULL,
+           exclude_cols    = NULL,
+           regression_pars = NULL,
+           niter           = 4000,
+           nwarmup         = 1000,
+           nchain          = 4,
+           ncore           = 1,
+           nthin           = 1,
+           inits           = "vb",
+           indPars         = "mean",
+           modelRegressor  = FALSE,
+           vb              = FALSE,
+           inc_postpred    = FALSE,
+           adapt_delta     = 0.95,
+           stepsize        = 1,
+           max_treedepth   = 10,
            ...) {
 
     ############### Stop checks ###############
@@ -180,6 +181,11 @@ hBayesDMregression_model <- function(task_name,
            "You should pass a data.frame, or a filepath for a data file,",
            "\"example\" for an example dataset, ",
            "or \"choose\" to choose it in a prompt.")
+    }
+
+    # Remove columns to exclude
+    if (!is.null(exclude_cols)) {
+      raw_data <- raw_data[, -exclude_cols, with=FALSE]
     }
 
     # Save initial colnames of raw_data for later
