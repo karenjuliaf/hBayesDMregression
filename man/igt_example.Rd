@@ -29,7 +29,7 @@ augmented covariates will be identical for all trials belonging to the same subj
 }
 \seealso{
 The
-\href{https://github.com/adamoshen/hBayesDMregression/data-raw/igt_example.R}{script} used to
+\href{https://github.com/adamoshen/hBayesDMregression/blob/main/data-raw/igt_example.R}{script} used to
 create the igt_example data set.
 }
 \keyword{datasets}

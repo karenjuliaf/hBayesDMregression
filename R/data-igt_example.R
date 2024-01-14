@@ -19,7 +19,7 @@
 #' }
 #'
 #' @seealso The
-#'   \href{https://github.com/adamoshen/hBayesDMregression/data-raw/igt_example.R}{script} used to
+#'   [script](https://github.com/adamoshen/hBayesDMregression/blob/main/data-raw/igt_example.R) used to
 #'   create the igt_example data set.
 #'
 "igt_example"
