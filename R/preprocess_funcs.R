@@ -71,7 +71,7 @@ igt_regression_preprocess_func <- function(raw_data, general_info, regression_pa
     covariate_matrix <- covariate_matrix[
       ,
       (true_factor_columns) := lapply(.SD, function(x) as.numeric(as.character(x))),
-      .SDcols=true_factor_columns
+      .SDcols = true_factor_columns
     ]
   }
 
