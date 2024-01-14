@@ -6,6 +6,7 @@
 #'
 #' @keywords internal
 #' @import hBayesDM
+#' @import data.table
 #'
 #' @param task_name Character value for name of task. E.g. \code{"gng"}.
 #' @param model_name Character value for name of model. E.g. \code{"m1"}.

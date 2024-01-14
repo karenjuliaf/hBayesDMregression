@@ -3,4 +3,5 @@
 export(igt_orl_regression)
 export(igt_pvl_decay_regression)
 export(igt_vpp_regression)
+import(data.table)
 import(hBayesDM)
