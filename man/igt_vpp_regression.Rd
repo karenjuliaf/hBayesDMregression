@@ -6,7 +6,8 @@
 \usage{
 igt_vpp_regression(
   data = NULL,
-  regression_pars,
+  exclude_cols = NULL,
+  regression_pars = NULL,
   niter = 4000,
   nwarmup = 1000,
   nchain = 4,
@@ -28,7 +29,10 @@ igt_vpp_regression(
 a filepath for a tab-seperated txt file, \code{igt_example} to use example data, or
 \code{"choose"} to choose data with an interactive window.
 Columns in the dataset must include:
-"subjID", "choice", "gain", "loss" and additional covariates. See \bold{Details} below for more information.}
+"subjID", "choice", "gain", "loss" and additional covariates. See \bold{Details} below for more information
+on the representation of additional covariates.}
+
+\item{exclude_cols}{A character vector of data columns to exclude from analysis.}
 
 \item{regression_pars}{The parameters of the model that should be used for regression, supplied
 as a character vector.}
@@ -122,8 +126,6 @@ however it is necessary that they be labeled correctly and contain the informati
 \item{loss}{Floating point value representing the amount of currency lost on that trial (e.g. 0, -50).}
 
 }
-\strong{*}Note: Unlike the \code{hBayesDM} package, all additional columns of the supplied data
-will be used. Therefore, unwanted columns should be removed beforehand.
 
 Categorical covariates should be one-hot encoded as 0s and 1s. See the \code{\link{igt_example}}
 data set for an example of one-hot encoded covariates. A categorical covariate can be one-hot
