@@ -22,6 +22,8 @@ Suggests:
     ggplot2 (>= 3.4.0),
     katex,
     knitr,
+    patchwork,
+    purrr,
     rmarkdown,
     tibble,
     tidyr
