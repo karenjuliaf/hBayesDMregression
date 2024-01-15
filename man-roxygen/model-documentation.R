@@ -76,6 +76,8 @@
 #'   \item{parVals}{List object containing the posterior samples over different parameters.}
 #'   \item{fit}{A class \code{\link[rstan]{stanfit}} object that contains the fitted Stan
 #'     model.}
+#'   \item{subjID}{The names of the subjects in alphanumeric order, i.e. the order may differ from
+#'     the original data supplied.}
 #'   \item{rawdata}{The raw data used to fit the model, as supplied by the user, returned as a
 #'     \code{data.frame} object.}
 #'   <% RETURN_REGRESSORS <- "\\item{modelRegressor}{List object containing the " %>

@@ -572,6 +572,7 @@ hBayesDMregression_model <- function(task_name,
     modelData$allIndPars        <- allIndPars
     modelData$parVals           <- parVals
     modelData$fit               <- fit
+    modelData$subjID            <- sort(unique(raw_data$subjID))
     modelData$rawdata           <- raw_data
     if (modelRegressor) {
       modelData$modelRegressor  <- model_regressor
