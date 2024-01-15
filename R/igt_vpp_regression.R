@@ -24,12 +24,41 @@
 #' @export
 #' @include hBayesDMregression_model.R
 #' @include preprocess_funcs.R
-
+#'
 #' @references
 #' Ahn, W. Y., Busemeyer, J. R., & Wagenmakers, E. J. (2008). Comparison of decision learning models using the generalization criterion method. Cognitive Science, 32(8), 1376-1402. https://doi.org/10.1080/03640210802352992
 #'
 #' Worthy, D. A., & Todd Maddox, W. (2013). A comparison model of reinforcement-learning and win-stay-lose-shift decision-making processes: A tribute to W.K. Estes. Journal of Mathematical Psychology, 59, 41-49. https://doi.org/10.1016/j.jmp.2013.10.001
 #'
+#' @examples
+#' \dontrun{
+#' # Run the model with the `igt_example` data set
+#' data("igt_example")
+#'
+#' output <- igt_vpp_regression(
+#'   data = igt_example,
+#'   exclude_cols = "trial",
+#'   regression_pars = c("lambda", "w"),
+#'   niter = 2000,
+#'   nwarmup = 1000,
+#'   nchain = 4,
+#'   ncore = 1
+#' )
+#'
+#' # Preview posterior samples of the regression coefficients; a matrix with dimension
+#' # (niter - nwarmup) x (# of covariates)
+#' head(output$parVals$beta)
+#'
+#' # Preview posterior samples of the sigmas corresponding to the regression coefficients; same
+#' # dimension as previous matrix
+#' head(output$parVals$sigma_beta)
+#'
+#' # View Stan code used to fit the model
+#' cat(output$model_code)
+#'
+#' # For visual diagnostics, see the plotting vignette:
+#' # vignette(plotting, package="hBayesDMregression")
+#' }
 
 
 igt_vpp_regression <- hBayesDMregression_model(

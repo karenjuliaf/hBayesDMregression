@@ -130,7 +130,7 @@ however it is necessary that they be labeled correctly and contain the informati
 Categorical covariates should be one-hot encoded as 0s and 1s. See the \code{\link{igt_example}}
 data set for an example of one-hot encoded covariates. A categorical covariate can be one-hot
 encoded by following the code in
-\href{https://gist.github.com/adamoshen/7cb505c485dc88508d23d03decb2fc84}{this example}
+\href{https://gist.github.com/adamoshen/7cb505c485dc88508d23d03decb2fc84}{this example}.
 
 \strong{nwarmup} is a numerical value that specifies how many MCMC samples should not be stored
 upon the beginning of each chain. For those familiar with Bayesian methods, this is equivalent
@@ -162,13 +162,18 @@ description of these arguments.
 }
 \examples{
 \dontrun{
-# Run the model with a given data.frame as df
-output <- igt_vpp_regression(
-  data = df, niter = 2000, nwarmup = 1000, nchain = 4, ncore = 4)
+# Run the model with the `igt_example` data set
+data("igt_example")
 
-# Run the model with example data
 output <- igt_vpp_regression(
-  data = "example", niter = 2000, nwarmup = 1000, nchain = 4, ncore = 4)
+  data = igt_example,
+  exclude_cols = "trial",
+  regression_pars = c("lambda", "w"),
+  niter = 2000,
+  nwarmup = 1000,
+  nchain = 4,
+  ncore = 1
+)
 
 # Preview posterior samples of the regression coefficients; a matrix with dimension
 # (niter - nwarmup) x (# of covariates)

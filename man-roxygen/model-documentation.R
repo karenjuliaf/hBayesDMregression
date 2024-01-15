@@ -112,7 +112,7 @@
 #' Categorical covariates should be one-hot encoded as 0s and 1s. See the [`igt_example`]
 #' data set for an example of one-hot encoded covariates. A categorical covariate can be one-hot
 #' encoded by following the code in
-#' [this example](https://gist.github.com/adamoshen/7cb505c485dc88508d23d03decb2fc84)
+#' [this example](https://gist.github.com/adamoshen/7cb505c485dc88508d23d03decb2fc84).
 #'
 #' \strong{nwarmup} is a numerical value that specifies how many MCMC samples should not be stored
 #'   upon the beginning of each chain. For those familiar with Bayesian methods, this is equivalent
@@ -143,28 +143,3 @@
 #'   description of these arguments.
 #'
 #' <%= ifelse(!is.na(CONTRIBUTOR), paste0("\\subsection{Contributors}{", CONTRIBUTOR, "}"), "") %>
-#'
-#' @examples
-#' \dontrun{
-#' # Run the model with a given data.frame as df
-#' output <- <%= MODEL_FUNCTION %>(
-#'   data = df, niter = 2000, nwarmup = 1000, nchain = 4, ncore = 4)
-#'
-#' # Run the model with example data
-#' output <- <%= MODEL_FUNCTION %>(
-#'   data = "example", niter = 2000, nwarmup = 1000, nchain = 4, ncore = 4)
-#'
-#' # Preview posterior samples of the regression coefficients; a matrix with dimension
-#' # (niter - nwarmup) x (# of covariates)
-#' head(output$parVals$beta)
-#'
-#' # Preview posterior samples of the sigmas corresponding to the regression coefficients; same
-#' # dimension as previous matrix
-#' head(output$parVals$sigma_beta)
-#'
-#' # View Stan code used to fit the model
-#' cat(output$model_code)
-#'
-#' # For visual diagnostics, see the plotting vignette:
-#' # vignette(plotting, package="hBayesDMregression")
-#' }

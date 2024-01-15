@@ -24,13 +24,41 @@
 #' @export
 #' @include hBayesDMregression_model.R
 #' @include preprocess_funcs.R
-
+#'
 #' @references
 #' Ahn, W. Y., Busemeyer, J. R., & Wagenmakers, E. J. (2008). Comparison of decision learning models using the generalization criterion method. Cognitive Science, 32(8), 1376-1402. https://doi.org/10.1080/03640210802352992
 #'
 #' Haines, N., Vassileva, J., & Ahn, W.-Y. (2018). The Outcome-Representation Learning Model: A Novel Reinforcement Learning Model of the Iowa Gambling Task. Cognitive Science. https://doi.org/10.1111/cogs.12688
 #'
-
+#' @examples
+#' \dontrun{
+#' # Run the model with the `igt_example` data set
+#' data("igt_example")
+#'
+#' output <- igt_orl_regression(
+#'   data = igt_example,
+#'   exclude_cols = "trial",
+#'   regression_pars = c("K", "betaF"),
+#'   niter = 2000,
+#'   nwarmup = 1000,
+#'   nchain = 4,
+#'   ncore = 1
+#' )
+#'
+#' # Preview posterior samples of the regression coefficients; a matrix with dimension
+#' # (niter - nwarmup) x (# of covariates)
+#' head(output$parVals$beta)
+#'
+#' # Preview posterior samples of the sigmas corresponding to the regression coefficients; same
+#' # dimension as previous matrix
+#' head(output$parVals$sigma_beta)
+#'
+#' # View Stan code used to fit the model
+#' cat(output$model_code)
+#'
+#' # For visual diagnostics, see the plotting vignette:
+#' # vignette(plotting, package="hBayesDMregression")
+#' }
 
 igt_orl_regression <- hBayesDMregression_model(
   task_name       = "igt",

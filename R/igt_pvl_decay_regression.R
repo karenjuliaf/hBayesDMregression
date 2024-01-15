@@ -30,7 +30,35 @@
 #'
 #' Ahn, W.-Y., Vasilev, G., Lee, S.-H., Busemeyer, J. R., Kruschke, J. K., Bechara, A., & Vassileva, J. (2014). Decision-making in stimulant and opiate addicts in protracted abstinence: evidence from computational modeling with pure users. Frontiers in Psychology, 5, 1376. https://doi.org/10.3389/fpsyg.2014.00849
 #'
-
+#' @examples
+#' \dontrun{
+#' # Run the model with the `igt_example` data set
+#' data("igt_example")
+#'
+#' output <- igt_pvl_decay_regression(
+#'   data = igt_example,
+#'   exclude_cols = "trial",
+#'   regression_pars = c("A", "cons"),
+#'   niter = 2000,
+#'   nwarmup = 1000,
+#'   nchain = 4,
+#'   ncore = 1
+#' )
+#'
+#' # Preview posterior samples of the regression coefficients; a matrix with dimension
+#' # (niter - nwarmup) x (# of covariates)
+#' head(output$parVals$beta)
+#'
+#' # Preview posterior samples of the sigmas corresponding to the regression coefficients; same
+#' # dimension as previous matrix
+#' head(output$parVals$sigma_beta)
+#'
+#' # View Stan code used to fit the model
+#' cat(output$model_code)
+#'
+#' # For visual diagnostics, see the plotting vignette:
+#' # vignette(plotting, package="hBayesDMregression")
+#' }
 
 igt_pvl_decay_regression <- hBayesDMregression_model(
   task_name       = "igt",
