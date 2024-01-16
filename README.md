@@ -34,9 +34,9 @@ The `igt_example` data set can be attached by calling
 data("igt_example", package="hBayesDMregression")
 ```
 
-This data set is an augmented version the IGT example data set found in
-the [hBayesDM](https://github.com/CCS-Lab/hBayesDM) package, containing
-additional continuous and categorical covariates.
+This data set is an augmented version of the IGT example data set found
+in the [hBayesDM](https://github.com/CCS-Lab/hBayesDM) package,
+containing additional continuous and categorical covariates.
 
 ### Model
 
