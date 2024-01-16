@@ -76,7 +76,7 @@ posterior_samples <- orl_model %>%
   pluck("parVals")
 ```
 
-Note: the above is equivalent to calling `orl_model$parVals` and `orl_model[["parVals"]]`.
+Note: the above is equivalent to calling either `orl_model$parVals` or `orl_model[["parVals"]]`.
 
 ```{r}
 str(posterior_samples)
@@ -180,7 +180,7 @@ sigma_beta <- posterior_samples %>%
   as_tibble() # Matrix -> Tibble
 
 K_sigma_betas <- sigma_beta %>%
-  select(starts_with("sigma_K")) %>%
+  select(starts_with("sigma_K")) %>% # Select sigma betas corresponding to model parameter K
   pivot_longer( # Reshape to long format
     everything(),
     names_to = "parameter",
@@ -208,7 +208,7 @@ plotted can be found by getting the names of the Stan fit:
 names(orl_model$fit)
 ```
 
-Suppose we want the trace plots for all parameters related to covariate `x4`:
+Suppose we want the traceplots for all parameters related to covariate `x4`:
 
 ```{r}
 pars_x4 <- grep("x4$", names(orl_model$fit), value=TRUE)

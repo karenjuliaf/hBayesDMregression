@@ -384,8 +384,8 @@ workspace since we will be calling it often.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">posterior_samples</span> <span class="op">&lt;-</span> <span class="va">orl_model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html">pluck</a></span><span class="op">(</span><span class="st">"parVals"</span><span class="op">)</span></span></code></pre></div>
-<p>Note: the above is equivalent to calling
-<code>orl_model$parVals</code> and
+<p>Note: the above is equivalent to calling either
+<code>orl_model$parVals</code> or
 <code>orl_model[["parVals"]]</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">posterior_samples</span><span class="op">)</span></span>
@@ -656,7 +656,7 @@ workspace since we will be calling it often.</p>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Matrix -&gt; Tibble</span></span>
 <span></span>
 <span><span class="va">K_sigma_betas</span> <span class="op">&lt;-</span> <span class="va">sigma_beta</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"sigma_K"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"sigma_K"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co"># Select sigma betas corresponding to model parameter K</span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span> <span class="co"># Reshape to long format</span></span>
 <span>    <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    names_to <span class="op">=</span> <span class="st">"parameter"</span>,</span>
@@ -721,7 +721,7 @@ Stan fit:</p>
 <span><span class="co">## [64] "sigma_betaF_sex"   "sigma_K_cond1"     "sigma_betaF_cond1"</span></span>
 <span><span class="co">## [67] "sigma_K_cond2"     "sigma_betaF_cond2" "sigma_K_cond3"    </span></span>
 <span><span class="co">## [70] "sigma_betaF_cond3" "lp__"</span></span></code></pre></div>
-<p>Suppose we want the trace plots for all parameters related to
+<p>Suppose we want the traceplots for all parameters related to
 covariate <code>x4</code>:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pars_x4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"x4$"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">orl_model</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span>, value<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
