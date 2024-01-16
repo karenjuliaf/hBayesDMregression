@@ -5,8 +5,8 @@ Authors@R: c(
     person("Adam", "Shen", , "adam.shen@carleton.ca", role = c("aut", "cre")),
     person("Dave", "Campbell", , "davecampbell@math.carleton.ca", role = c("aut", "fnd", "rev"))
   )
-Description: Perform hierarchical linear regression of Iowa Gambling Task model parameters on a set
-    of user-supplied covariates.
+Description: An extension of the hBayesDM package, this package is used to perform hierarchical
+    linear regression of Iowa Gambling Task model parameters on a set of user-supplied covariates.
 License: GPL (>= 3) + file LICENSE
 URL: https://github.com/adamoshen/hBayesDMregression
 BugReports: https://github.com/adamoshen/hBayesDMregression/issues
