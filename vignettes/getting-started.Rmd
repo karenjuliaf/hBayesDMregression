@@ -1,0 +1,241 @@
+---
+title: "Getting started"
+output:
+  rmarkdown::html_vignette:
+    md_extensions: -smart
+    highlight_downlit: true
+vignette: >
+  %\VignetteIndexEntry{Getting started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "##",
+  message = FALSE,
+  warning = FALSE,
+  dev = "svglite",
+  fig.width = 7,
+  fig.height = 9,
+  fig.align = "center"
+)
+```
+
+```{r setup}
+library(hBayesDMregression)
+
+# Tidyverse packages
+library(tibble)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(purrr)
+library(magrittr)
+
+# For MCMC diagnostics
+library(rstan)
+```
+
+# An example model
+
+```{r}
+data("igt_example")
+
+head(igt_example)
+```
+
+Note that the included example data set has a `trial` column that records the trial number for each
+subject. This column should be excluded when building the model.
+
+```{r, eval=FALSE}
+## NOT RUN
+orl_model <- igt_orl_regression(
+  igt_example,
+  exclude_cols = "trial",
+  regression_pars = c("K", "betaF"),
+  nchain = 3,
+  niter = 3000,
+  nwarmup = 1000,
+  ncore = parallel::detectCores() / 2
+)
+```
+
+```{r}
+orl_model <- readRDS("orl_model.rds")
+```
+
+# Distributions of posterior samples
+
+The posterior samples are contained in the `parVals` index of the model output. We will extract and
+assign it to a variable in our workspace since we will be calling it often.
+
+```{r}
+posterior_samples <- orl_model %>%
+  pluck("parVals")
+```
+
+Note: the above is equivalent to calling `orl_model$parVals` and `orl_model[["parVals"]]`.
+
+```{r}
+str(posterior_samples)
+```
+
+## Hyperparameters
+
+### Mu
+
+```{r}
+mu <- posterior_samples %>% # This is a list
+  keep_at(~ grepl("^mu_", .x)) %>% # Keep list elements whose names begin with `mu_`
+  do.call(cbind, .) %>% # Column-bind the list elements
+  as_tibble() %>% # Matrix -> Tibble
+  pivot_longer(everything(), names_to="parameter") # Reshape to long format
+
+mu
+```
+
+```{r}
+ggplot(mu) +
+  geom_histogram(aes(x=value, y=after_stat(density)), colour="#56B4E9", fill="#0072B2", alpha=0.7) +
+  facet_wrap(~parameter, scales="free", ncol=2) +
+  theme_bw() +
+  labs(x="Value", y="Density")
+```
+
+### Sigma
+
+```{r}
+sigma <- posterior_samples %>% # This is a list
+  pluck("sigma") %>% # This is a matrix
+  set_colnames(paste0("sigma_", orl_model$modelPars)) %>% # Set column names
+  as_tibble() %>% # Matrix -> Tibble
+  pivot_longer(everything(), names_to="parameter") # Reshape to long format
+
+sigma
+```
+
+```{r}
+ggplot(sigma) +
+  geom_histogram(aes(x=value, y=after_stat(density)), colour="#56B4E9", fill="#0072B2", alpha=0.7) +
+  facet_wrap(~parameter, scales="free", ncol=2) +
+  theme_bw() +
+  labs(x="Value", y="Density")
+```
+
+## Model parameters
+
+```{r}
+model_parameters <- posterior_samples %>% # This is a list
+  keep_at(orl_model$modelPars) %>% # This is a list of matrices
+  map(~ set_colnames(.x, paste0(orl_model$subjID))) %>% # Set column names for each matrix in the list
+  map(as_tibble) %>% # Matrix -> Tibble for each matrix in the list
+  map(~ pivot_longer(.x, everything(), names_to="subjID")) # Reshape each matrix within list to long format
+
+model_parameters
+```
+
+```{r}
+ggplot(model_parameters$Arew) +
+  geom_histogram(aes(x=value, y=after_stat(density)), colour="#56B4E9", fill="#0072B2", alpha=0.7) +
+  facet_wrap(~subjID, scales="free", labeller="label_both") +
+  theme_bw() +
+  labs(x="Value", y="Density", caption="Model parameter Arew by subject")
+```
+
+## Regression parameters
+
+### Beta
+
+```{r}
+beta <- posterior_samples %>%
+  pluck("beta") %>% # This is a matrix and already has column names
+  as_tibble() # Matrix -> Tibble
+
+K_betas <- beta %>%
+  select(starts_with("K")) %>% # Select betas corresponding to model parameter K
+  pivot_longer( # Reshape to long format
+    everything(),
+    names_to = "parameter",
+    names_transform = ~ sub("K_", replacement="", .x)
+  )
+
+K_betas
+```
+
+```{r}
+ggplot(K_betas) +
+  geom_histogram(aes(x=value, y=after_stat(density)), colour="#56B4E9", fill="#0072B2", alpha=0.7) +
+  facet_wrap(~parameter, scales="free") +
+  theme_bw() +
+  labs(x="Value", y="Density", caption="Betas for model parameter K")
+```
+
+### Sigma beta
+
+```{r}
+sigma_beta <- posterior_samples %>%
+  pluck("sigma_beta") %>% # This is a matrix and already has column names
+  as_tibble() # Matrix -> Tibble
+
+K_sigma_betas <- sigma_beta %>%
+  select(starts_with("sigma_K")) %>%
+  pivot_longer( # Reshape to long format
+    everything(),
+    names_to = "parameter",
+    names_transform = ~ sub("sigma_K_", replacement="", .x)
+  )
+
+K_sigma_betas
+```
+
+```{r}
+ggplot(K_sigma_betas) +
+  geom_histogram(aes(x=value, y=after_stat(density)), colour="#56B4E9", fill="#0072B2", alpha=0.7) +
+  facet_wrap(~parameter, scales="free") +
+  theme_bw() +
+  labs(x="Value", y="Density", caption="Sigma betas for model parameter K")
+```
+
+# Traceplots
+
+Since the original Stan fit is included in the `hBayesDMregression` model output, we can pass
+it directly to `rstan::traceplot()` to create traceplots. The parameters whose traceplots can be
+plotted can be found by getting the names of the Stan fit:
+
+```{r}
+names(orl_model$fit)
+```
+
+Suppose we want the trace plots for all parameters related to covariate `x4`:
+
+```{r}
+pars_x4 <- grep("x4$", names(orl_model$fit), value=TRUE)
+
+pars_x4
+```
+
+```{r}
+traceplot(orl_model$fit, pars=pars_x4)
+```
+
+Note that `rstan::traceplot()` uses `{ggplot2}` for plotting. As such, additional customizations can
+be made via the `{ggplot2}` package.
+
+# Interval plots
+
+Intervals plots are constructed similarly.
+
+```{r}
+pars_age <- grep("age$", names(orl_model$fit), value=TRUE)
+
+pars_age
+```
+
+```{r}
+stan_plot(orl_model$fit, pars=pars_age)
+```
+
+Note that `rstan::stan_plot()` uses `{ggplot2}` for plotting. As such, additional customizations can
+be made via the `{ggplot2}` package.
