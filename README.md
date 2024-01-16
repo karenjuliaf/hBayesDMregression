@@ -15,9 +15,10 @@ parameters on a set of user-supplied covariates.
 remotes::install_github("adamoshen/hBayesDMregression")
 ```
 
-A list of included vignettes can be found below. If you would like a
-local copy of the vignettes with your installation, install the package
-instead using
+A list of included vignettes can be found
+[below](https://github.com/adamoshen/hBayesDMregression?tab=readme-ov-file#vignette-index).
+If you would like a local copy of the vignettes with your installation,
+install the package instead using
 
 ``` r
 remotes::install_github("adamoshen/hBayesDMregression", build_vignettes=TRUE)
@@ -39,9 +40,10 @@ additional continuous and categorical covariates.
 
 ### Model
 
-An example model using the `igt_example` data set and
+An example model built using the `igt_example` data set and
 `hBayesDMregression::igt_orl_regression()` can be found under
-`vignettes/orl_model.rds`. This model can be attached by calling
+`vignettes/orl_model.rds`. This model can be attached by first saving it
+to your computer and calling
 
 ``` r
 orl_model <- readRDS("orl_model.rds")
