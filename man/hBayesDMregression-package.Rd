@@ -4,9 +4,9 @@
 \name{hBayesDMregression-package}
 \alias{hBayesDMregression}
 \alias{hBayesDMregression-package}
-\title{hBayesDMregression: Regression of Iowa Gambling Task parameters on covariates}
+\title{hBayesDMregression: Hierarchical linear regression of Iowa Gambling Task model parameters on covariates}
 \description{
-Perform hierarchical linear regression of Iowa Gambling Task model parameters on a set of user-supplied covariates.
+An extension of the hBayesDM package, this package is used to perform hierarchical linear regression of Iowa Gambling Task model parameters on a set of user-supplied covariates.
 }
 \seealso{
 Useful links:
