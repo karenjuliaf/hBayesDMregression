@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" data-external="1" defer integrity="sha256-bgI9WhLOPSUlPrdgHUg3rPIB2vq+D+mYkUTM3q0U8fw=" crossorigin="anonymous"></script>
+<script>document.addEventListener("DOMContentLoaded", function () {
+  var mathElements = document.getElementsByClassName("math");
+  var macros = [];
+  for (var i = 0; i < mathElements.length; i++) {
+    var texText = mathElements[i].firstChild;
+    if (mathElements[i].tagName == "SPAN") {
+      katex.render(texText.data, mathElements[i], {
+        displayMode: mathElements[i].classList.contains("display"),
+        throwOnError: false,
+        macros: macros,
+        fleqn: false
+      });
+    }}});
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css" data-external="1">
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction</h1>
+
+
+
+<div id="igt_orl_regression" class="section level1">
+<h1><code>igt_orl_regression()</code></h1>
+<p>For each subject, indexed by <span class="math inline">i \,=\,
+1,\,\ldots,\,n</span>, there are five parameters:</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">A_{\text{rew},\,i}</span>: reward
+learning rate.</p></li>
+<li><p><span class="math inline">A_{\text{pun},\,i}</span>: punishment
+learning rate.</p></li>
+<li><p><span class="math inline">K_{i}</span>: perseverance
+decay.</p></li>
+<li><p><span class="math inline">\beta_{F,\,i}</span>: outcome frequency
+weight.</p></li>
+<li><p><span class="math inline">\beta_{P,\,i}</span>: perseverance
+weight.</p></li>
+</ol>
+<p>The raw, untransformed parameters are denoted with the subscript
+<span class="math inline">\text{pr}</span> with priors given by:</p>
+<p><span class="math display">A_{\text{rew},\,\text{pr},\,i},\,A_{\text{pun},\,\text{pr},\,i},\,K_{\text{pr},\,i},\,
+\beta_{F,\,\text{pr},\,i},\,\beta_{P,\,\text{pr},\,i}
+\,\stackrel{\text{iid}}{\sim}\, N(0,1).</span></p>
+<p>There are ten hyperparameters (group parameters), two for each of the
+subject-level parameters, <span class="math inline">A_{\text{rew}}</span>, <span class="math inline">A_{\text{pun}}</span>, <span class="math inline">K</span>, <span class="math inline">\beta_{F}</span>, <span class="math inline">\beta_{P}</span>:</p>
+<p><span class="math display">\mu_{A_{\text{rew}}},\,\mu_{A_{\text{pun}}},\,\mu_{K},\,\mu_{\beta_{F}},\,\mu_{\beta_{P}}
+\,\stackrel{\text{iid}}{\sim}\, N(0,1),\tag{1.1}</span> <span class="math display">\sigma_{A_{\text{rew}}},\,\sigma_{A_{\text{pun}}},\,\sigma_{K}
+\,\stackrel{\text{iid}}{\sim}\,
+TN(0,\,0.2^{2},\,0),\tag{1.2}</span> <span class="math display">\sigma_{\beta_{F}},\,\sigma_{\beta_{P}}
+\,\stackrel{\text{iid}}{\sim}\, \text{Cauchy}(0,1),</span></p>
+<p>where <span class="math inline">TN(\mu,\,\sigma^{2},\,a)</span>
+denotes the truncated normal distribution with lower bound <span class="math inline">a</span>.</p>
+<p>The following focuses only on the subject-level parameter <span class="math inline">K_{i}</span>, but a similar procedure is applied to
+the remaining subject-level parameters when specified in the
+<code>regression_pars</code> argument of
+<code>igt_orl_regression()</code>.</p>
+<p>The transformed parameters are obtained by performing the <em>Matt
+trick</em><span class="citation"><sup>1</sup></span>, where the
+untransformed parameter is scaled by the respective standard deviation
+parameter, offset by the respective mean parameter, and passed through
+the inverse probit function (standard normal cdf):</p>
+<p><span class="math display">K_{i} \,=\, \Phi(\mu_{K} \,+\,
+K_{\text{pr},\,i}\,\sigma_{K}).</span></p>
+<p>The <em>Matt trick</em> is used as Stan&#39;s sampler can be slow or
+experience difficulties sampling from particular regions of a
+distribution, when sampling from distributions with difficult posterior
+geometries.</p>
+<div id="adding-covariates" class="section level2">
+<h2>Adding covariates</h2>
+<p>Suppose there are <span class="math inline">J</span> covariates of
+interest. Instead of using a standard normal prior for <span class="math inline">\mu_{K}</span> <span class="math inline">(1.1)</span>, as in Haines et al., 2018<span class="citation"><sup>2</sup></span>, we first propose that <span class="math inline">\mu_{K}</span> can be rewritten as:</p>
+<p><span class="math display">\mu_{K} \,=\, \beta_{K,\,0} \,+\,
+\beta_{K,\,1}X_{1} \,+\, \ldots \,+\, \beta_{K,\,J}X_{J}.</span></p>
+<p>We then declare the following priors:</p>
+<p><span class="math display">\beta_{K,\,0} \,\sim\, N(0,1),</span>
+<span class="math display">\beta_{K,\,j}\,|\,\sigma_{j} \,\sim\,
+N(0,\,\sigma^{2}_{j}),</span> <span class="math display">\sigma_{j}
+\,\sim\, \text{Exp}(1/s_{X_{j}}),</span></p>
+<p>for all <span class="math inline">j \,=\, 1,\,\ldots,\,J</span>,
+where <span class="math inline">s_{X_{j}}</span> is either the standard
+deviation of the <span class="math inline">j^{\text{th}}</span>
+covariate&#39;s values if <span class="math inline">X_{j}</span> is
+continuous, or is equal to 1 if the <span class="math inline">j^{\text{th}}</span> covariate is one-hot
+encoded.</p>
+<p>Reusing the prior of <span class="math inline">\sigma_{K}</span> from
+<span class="math inline">(1.2)</span>, the <em>Matt trick</em> is used
+to induce a new prior on <span class="math inline">K_{i}</span>: <span class="math display">\begin{align*}
+K_{i} &amp;\,=\, \Phi(\mu_{K} \,+\,
+K_{\text{pr},\,i}\,\sigma_{K})\\[3mm]
+&amp;\,=\, \Phi(\beta_{K,\,0} \,+\, \beta_{K,\,1}X_{1} \,+\, \ldots
+\,+\, \beta_{K,\,J}X_{J} \,+\,
+K_{\text{pr},\,i}\,\sigma_{K}).
+\end{align*}</span></p>
+</div>
+</div>
+<div id="igt_pvl_decay_regression" class="section level1">
+<h1><code>igt_pvl_decay_regression()</code></h1>
+<p>For each subject, indexed by <span class="math inline">i \,=\,
+1,\,\ldots,\,n</span>, there are four parameters:</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">A_{i}</span>: decay rate.</p></li>
+<li><p><span class="math inline">\alpha_{i}</span>: outcome
+sensitivity.</p></li>
+<li><p><span class="math inline">c_{i}</span>: response
+consistency.</p></li>
+<li><p><span class="math inline">\lambda_{i}</span>: loss
+aversion.</p></li>
+</ol>
+<p>The raw, untransformed parameters are denoted with the subscript
+<span class="math inline">\text{pr}</span> with priors given by:</p>
+<p><span class="math display">A_{\text{pr},\,i},\,\alpha_{\text{pr},\,i},\,c_{\text{pr},\,i},\,\lambda_{\text{pr},\,i}
+\,\stackrel{\text{iid}}{\sim}\, N(0,1).</span></p>
+<p>There are eight hyperparameters (group parameters), two for each of
+the subject-level parameters, <span class="math inline">A</span>, <span class="math inline">\alpha</span>, <span class="math inline">c</span>,
+and <span class="math inline">\lambda</span>:</p>
+<p><span class="math display">\mu_{A},\,\mu_{\alpha},\,\mu_{c},\,\mu_{\lambda}
+\,\stackrel{\text{iid}}{\sim}\, N(0,1),\tag{2.1}</span> <span class="math display">\sigma_{A},\,\sigma_{\alpha},\,\sigma_{c},\,\sigma_{\lambda}
+\,\stackrel{\text{iid}}{\sim}\, TN(0,\,0.2^{2},\,
+0),\tag{2.2}</span></p>
+<p>where <span class="math inline">TN(\mu,\,\sigma^{2},\,a)</span>
+denotes the truncated normal distribution with lower bound <span class="math inline">a</span>.</p>
+<p>The following focuses only on the subject-level parameter <span class="math inline">A_{i}</span>, but a similar procedure is applied to
+the remaining subject-level parameters when specified in the
+<code>regression_pars</code> argument of
+<code>igt_pvl_decay_regression()</code>.</p>
+<p>The transformed parameters are obtained by performing the <em>Matt
+trick</em><span class="citation"><sup>1</sup></span>, where the
+untransformed parameter is scaled by the respective standard deviation
+parameter, offset by the respective mean parameter, and passed through
+the inverse probit function (standard normal cdf):</p>
+<p><span class="math display">A_{i} \,=\, \Phi(\mu_{A} \,+\,
+A_{\text{pr},\,i}\,\sigma_{A}).</span></p>
+<p>The <em>Matt trick</em> is used as Stan&#39;s sampler can be slow or
+experience difficulties sampling from particular regions of a
+distribution, when sampling from distributions with difficult posterior
+geometries.</p>
+<div id="adding-covariates-1" class="section level2">
+<h2>Adding covariates</h2>
+<p>Suppose there are <span class="math inline">J</span> covariates of
+interest. Instead of using a standard normal prior for <span class="math inline">\mu_{A}</span> <span class="math inline">(2.1)</span>, as in Ahn et al., 2014<span class="citation"><sup>3</sup></span>, we first propose that <span class="math inline">\mu_{A}</span> can be rewritten as:</p>
+<p><span class="math display">\mu_{A} \,=\, \beta_{A,\,0} \,+\,
+\beta_{A,\,1}X_{1} \,+\, \ldots \,+\,\beta_{A,\,J}X_{J}.</span></p>
+<p>We then declare the following priors:</p>
+<p><span class="math display">\beta_{A,\,0} \,\sim\, N(0,1),</span>
+<span class="math display">\beta_{A,\,j}\,|\,\sigma_{j} \,\sim\,
+N(0,\,\sigma^{2}_{j}),</span> <span class="math display">\sigma_{j}
+\,\sim\, \text{Exp}(1/s_{X_{j}}),</span></p>
+<p>for all <span class="math inline">j \,=\, 1,\,\ldots,\,J</span>,
+where <span class="math inline">s_{X_{j}}</span> is either the standard
+deviation of the <span class="math inline">j^{\text{th}}</span>
+covariate&#39;s values if <span class="math inline">X_{j}</span> is
+continuous, or is equal to 1 if the <span class="math inline">j^{\text{th}}</span> covariate is one-hot
+encoded.</p>
+<p>Reusing the prior of <span class="math inline">\sigma_{A}</span> from
+<span class="math inline">(2.2)</span>, the <em>Matt trick</em> is used
+to induce a new prior on <span class="math inline">A_{i}</span>: <span class="math display">\begin{align*}
+A_{i} &amp;\,=\, \Phi(\mu_{A} \,+\,
+A_{\text{pr},\,i}\,\sigma_{A})\\[3mm]
+&amp;\,=\, \Phi(\beta_{A,\,0} \,+\, \beta_{A,\,1}X_{1} \,+\, \ldots
+\,+\, \beta_{A,\,J}X_{J} \,+\,
+A_{\text{pr},\,i}\,\sigma_{A}).
+\end{align*}</span></p>
+</div>
+</div>
+<div id="igt_vpp_regression" class="section level1">
+<h1><code>igt_vpp_regression()</code></h1>
+<p>For each subject, indexed by <span class="math inline">i \,=\,
+1,\,\ldots,\,n</span>, there are eight parameters:</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">A_{i}</span>: learning rate.</p></li>
+<li><p><span class="math inline">\alpha_{i}</span>: outcome
+sensitivity.</p></li>
+<li><p><span class="math inline">c_{i}</span>: response
+consistency.</p></li>
+<li><p><span class="math inline">\lambda_{i}</span>: loss
+aversion.</p></li>
+<li><p><span class="math inline">\varepsilon_{\text{pos},\,i}</span>:
+gain impact.</p></li>
+<li><p><span class="math inline">\varepsilon_{\text{neg},\,i}</span>:
+loss impact.</p></li>
+<li><p><span class="math inline">K_{i}</span>: decay rate.</p></li>
+<li><p><span class="math inline">w_{i}</span>: reinforcement learning
+weight.</p></li>
+</ol>
+<p>The raw, untransformed parameters are denoted with the subscript
+<span class="math inline">\text{pr}</span> with priors given by:</p>
+<p><span class="math display">A_{\text{pr},\,i},\,\alpha_{\text{pr},\,i},\,c_{\text{pr},\,i},\,\lambda_{\text{pr},\,i},\,
+\varepsilon_{\text{pos},\,\text{pr},\,i},\,\varepsilon_{\text{neg},\,\text{pr},\,i},\,
+K_{\text{pr},\,i},\,w_{\text{pr},\,i} \,\stackrel{\text{iid}}{\sim}\,
+N(0,1).</span></p>
+<p>There are 14 hyperparameters (group parameters), two for each of the
+subject-level parameters <span class="math inline">A</span>, <span class="math inline">\alpha</span>, <span class="math inline">c</span>,
+<span class="math inline">\lambda</span>, <span class="math inline">\varepsilon_{\text{pos}}</span>, <span class="math inline">\varepsilon_{\text{neg}}</span>, <span class="math inline">K</span>, <span class="math inline">w</span>:</p>
+<p><span class="math display">\mu_{A},\,\mu_{\alpha},\,\mu_{c},\,\mu_{\lambda},\,\mu_{\varepsilon_{\text{pos}}},\,
+\mu_{\varepsilon_{\text{neg}}},\,\mu_{K},\,\mu_{w}
+\,\stackrel{\text{iid}}{\sim}\, N(0,1),\tag{3.1}</span> <span class="math display">\sigma_{A},\,\sigma_{\alpha},\,\sigma_{c},\,\sigma_{\lambda},\,\sigma_{K},\,\sigma_{w}
+\,\stackrel{\text{iid}}{\sim}\, TN(0,\,0.2^{2},\,0),\tag{3.2}</span>
+<span class="math display">\sigma_{\varepsilon_{\text{pos}}},\,\sigma_{\varepsilon_{\text{neg}}}
+\,\stackrel{\text{iid}}{\sim}
+\,\text{Cauchy}(0,1),</span></p>
+<p>where <span class="math inline">TN(\mu,\,\sigma^{2},\,a)</span>
+denotes the truncated normal distribution with lower bound <span class="math inline">a</span>.</p>
+<p>The following focuses only on the subject-level parameter <span class="math inline">A_{i}</span>, but a similar procedure is applied to
+the remaining subject-level parameters when specified in the
+<code>regression_pars</code> argument of
+<code>igt_vpp_regression()</code>.</p>
+<p>The transformed parameters are obtained by performing the <em>Matt
+trick</em><span class="citation"><sup>1</sup></span>, where the
+untransformed parameter is scaled by the respective standard deviation
+parameter, offset by the respective mean parameter, and passed through
+the inverse probit function (standard normal cdf):</p>
+<p><span class="math display">A_{i} \,=\, \Phi(\mu_{A} \,+\,
+A_{\text{pr},\,i}\,\sigma_{A}).</span></p>
+<p>The <em>Matt trick</em> is used as Stan&#39;s sampler can be slow or
+experience difficulties sampling from particular regions of a
+distribution, when sampling from distributions with difficult posterior
+geometries.</p>
+<div id="adding-covariates-2" class="section level2">
+<h2>Adding covariates</h2>
+<p>Suppose there are <span class="math inline">J</span> covariates of
+interest. Instead of using a standard normal prior for <span class="math inline">\mu_{A}</span> <span class="math inline">(3.1)</span>, as in Worthy et al., 2014<span class="citation"><sup>4</sup></span>, we first propose that <span class="math inline">\mu_{A}</span> can be rewritten as:</p>
+<p><span class="math display">\mu_{A} \,=\, \beta_{A,\,0} \,+\,
+\beta_{A,\,1}X_{1} \,+\, \ldots \,+\,\beta_{A,\,J}X_{J}.</span></p>
+<p>We then declare the following priors:</p>
+<p><span class="math display">\beta_{A,\,0} \,\sim\, N(0,1),</span>
+<span class="math display">\beta_{A,\,j}\,|\,\sigma_{j} \,\sim\,
+N(0,\,\sigma^{2}_{j}),</span> <span class="math display">\sigma_{j}
+\,\sim\, \text{Exp}(1/s_{X_{j}}),</span></p>
+<p>for all <span class="math inline">j \,=\, 1,\ldots,\,J</span>, where
+<span class="math inline">s_{X_{j}}</span> is either the standard
+deviation of the <span class="math inline">j^{\text{th}}</span>
+covariate&#39;s values if <span class="math inline">X_{j}</span> is
+continuous, or is equal to 1 if the <span class="math inline">j^{\text{th}}</span> covariate is one-hot
+encoded.</p>
+<p>Reusing the prior of <span class="math inline">\sigma_{A}</span> from
+<span class="math inline">(3.2)</span>, the <em>Matt trick</em> is used
+to induce a new prior on <span class="math inline">A_{i}</span>: <span class="math display">\begin{align*}
+A_{i} &amp;\,=\, \Phi(\mu_{A} \,+\,
+A_{\text{pr},\,i}\,\sigma_{A})\\[3mm]
+&amp;\,=\, \Phi(\beta_{A,\,0} \,+\, \beta_{A,\,1}X_{1} \,+\, \ldots
+\,+\, \beta_{A,\,j}X_{j} \,+\,
+A_{\text{pr},\,i}\,\sigma_{A}).
+\end{align*}</span></p>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-reparam" class="csl-entry">
+1. Team, Stan Development. (2023). <em><span class="nocase">25.7
+Reparameterization; Stan User’s Guide</span></em>. <a href="https://mc-stan.org/docs/stan-users-guide/reparameterization.html">https://mc-stan.org/docs/stan-users-guide/reparameterization.html</a>
+</div>
+<div id="ref-haines2018" class="csl-entry">
+2. Haines, N., Vassileva, J., &amp; Ahn, W. (2018). The
+<span>Outcome</span>‐<span>Representation</span> <span>Learning</span>
+<span>Model</span>: <span>A</span> <span>Novel</span>
+<span>Reinforcement</span> <span>Learning</span> <span>Model</span> of
+the <span>Iowa</span> <span>Gambling</span> <span>Task</span>.
+<em>Cognitive Science</em>, <em>42</em>(8), 2534–2561. <a href="https://doi.org/10.1111/cogs.12688">https://doi.org/10.1111/cogs.12688</a>
+</div>
+<div id="ref-ahn2014" class="csl-entry">
+3. Ahn, W.-Y., Vasilev, G., Lee, S.-H., Busemeyer, J. R., Kruschke, J.
+K., Bechara, A., &amp; Vassileva, J. (2014). Decision-making in
+stimulant and opiate addicts in protracted abstinence: Evidence from
+computational modeling with pure users. <em>Frontiers in
+Psychology</em>, <em>5</em>. <a href="https://doi.org/10.3389/fpsyg.2014.00849">https://doi.org/10.3389/fpsyg.2014.00849</a>
+</div>
+<div id="ref-worthy2014" class="csl-entry">
+4. Worthy, D. A., &amp; Todd Maddox, W. (2014). A comparison model of
+reinforcement-learning and win-stay-lose-shift decision-making
+processes: <span>A</span> tribute to <span>W</span>.<span>K</span>.
+<span>Estes</span>. <em>Journal of Mathematical Psychology</em>,
+<em>59</em>, 41–49. <a href="https://doi.org/10.1016/j.jmp.2013.10.001">https://doi.org/10.1016/j.jmp.2013.10.001</a>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>
