@@ -1,5 +1,5 @@
 Package: hBayesDMregression
-Title: Regression of Iowa Gambling Task parameters on covariates
+Title: Hierarchical linear regression of Iowa Gambling Task model parameters on covariates
 Version: 0.0.0.9000
 Authors@R: c(
     person("Adam", "Shen", , "adam.shen@carleton.ca", role = c("aut", "cre")),
