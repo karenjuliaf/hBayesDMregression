@@ -23,6 +23,12 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{css, echo=FALSE}
+.sourceCode {
+  overflow: auto !important;
+}
+```
+
 ```{r setup}
 library(hBayesDMregression)
 
