@@ -56,8 +56,8 @@
 #' # View Stan code used to fit the model
 #' cat(output$model_code)
 #'
-#' # For visual diagnostics, see the plotting vignette:
-#' # vignette(plotting, package="hBayesDMregression")
+#' # For visual diagnostics, see the "Getting started" vignette:
+#' # vignette("getting-started", package="hBayesDMregression")
 #' }
 
 igt_pvl_decay_regression <- hBayesDMregression_model(

@@ -188,8 +188,8 @@ head(output$parVals$sigma_beta)
 # View Stan code used to fit the model
 cat(output$model_code)
 
-# For visual diagnostics, see the plotting vignette:
-# vignette(plotting, package="hBayesDMregression")
+# For visual diagnostics, see the "Getting started" vignette:
+# vignette("getting-started", package="hBayesDMregression")
 }
 }
 \references{
