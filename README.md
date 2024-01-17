@@ -21,7 +21,7 @@ If you would like a local copy of the vignettes with your installation,
 install the package instead using
 
 ``` r
-remotes::install_github("adamoshen/hBayesDMregression", build_vignettes=TRUE)
+remotes::install_github("adamoshen/hBayesDMregression", build_vignettes=TRUE, dependencies=TRUE)
 ```
 
 ## Included objects
