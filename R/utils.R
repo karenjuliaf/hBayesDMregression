@@ -3,6 +3,7 @@ reorder_regression_pars <- function(model_name, regression_pars) {
     model_name,
     "orl_regression" = c("Arew", "Apun", "K", "betaF", "betaP"),
     "pvl_decay_regression" = c("A", "alpha", "cons", "lambda"),
+    "pvl_delta_regression" = c("A", "alpha", "cons", "lambda"),
     "vpp_regression" = c("A", "alpha", "cons", "lambda", "K", "w", "epP", "epN")
   )
 

@@ -5,6 +5,7 @@ write_stan_model <- function(model_name, regression_pars) {
     model_name,
     "orl_regression" = write_stan_model_orl_regression(regression_pars),
     "pvl_decay_regression" = write_stan_model_pvl_decay_regression(regression_pars),
+    "pvl_delta_regression" = write_stan_model_pvl_delta_regression(regression_pars),
     "vpp_regression" = write_stan_model_vpp_regression(regression_pars)
   )
 }
@@ -427,6 +428,190 @@ write_stan_model_pvl_decay_regression <- function(regression_pars) {
           // decay-RI
           ev *= A[i];
           ev[choice[i, t]] += curUtil;
+        }
+      }
+    }
+  }", .open="{{", .close="}}", .trim=FALSE)
+
+  return(model_code)
+}
+
+write_stan_model_pvl_delta_regression <- function(regression_pars) {
+  regression_strings <- list(
+    "A" = "A[i] = Phi_approx(mu_pr[1] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[1] * A_pr[i]);",
+    "alpha" = "alpha[i] = Phi_approx(mu_pr[2] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[2] * alpha_pr[i]) * 2;",
+    "cons" = "cons[i] = Phi_approx(mu_pr[3] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[3] * cons_pr[i]) * 5;",
+    "lambda" = "lambda[i] = Phi_approx(mu_pr[4] + covariate_matrix[i] * beta[{{par_index}}]' + sigma[4] * lambda_pr[i]) * 10;"
+  )
+  non_regression_strings <- list(
+    "A" = "A[i] = Phi_approx(mu_pr[1] + sigma[1] * A_pr[i]);",
+    "alpha" = "alpha[i] = Phi_approx(mu_pr[2] + sigma[2] * alpha_pr[i]) * 2;",
+    "cons" = "cons[i] = Phi_approx(mu_pr[3] + sigma[3] * cons_pr[i]) * 5;",
+    "lambda" = "lambda[i] = Phi_approx(mu_pr[4] + sigma[4] * lambda_pr[i]) * 10;"
+  )
+  non_regression_pars <- setdiff(names(regression_strings), regression_pars)
+
+  main_chunk <- regression_strings[regression_pars]
+  main_chunk <- mapply(
+    gsub,
+    x = main_chunk,
+    replacement = as.character(1:length(regression_pars)),
+    MoreArgs = list(pattern = "\\{\\{par_index\\}\\}"),
+    SIMPLIFY = FALSE
+  )
+  main_chunk <- c(main_chunk, non_regression_strings[non_regression_pars])
+  main_chunk <- main_chunk[sort(names(main_chunk))]
+
+  npars <- length(regression_pars)
+
+  model_code <- glue::glue("
+  data {
+    int<lower=1> N;
+    int<lower=1> T;
+    int<lower=1, upper=T> Tsubj[N];
+    int choice[N, T];
+    real outcome[N, T];
+
+    int<lower=1> ncov;
+    matrix[N, ncov] covariate_matrix;
+    matrix<lower=0>[{{npars}}, ncov] covariate_precisions;
+  }
+  transformed data {
+    vector[4] initV;
+    initV  = rep_vector(0.0, 4);
+  }
+  parameters {
+  // Declare all parameters as vectors for vectorizing
+    // Hyper(group)-parameters
+    vector[4] mu_pr;
+    vector<lower=0>[4] sigma;
+    matrix<lower=0>[{{npars}}, ncov] sigma_beta;
+    matrix[{{npars}}, ncov] beta;
+
+    // Subject-level raw parameters (for Matt trick)
+    vector[N] A_pr;
+    vector[N] alpha_pr;
+    vector[N] cons_pr;
+    vector[N] lambda_pr;
+  }
+  transformed parameters {
+    // Transform subject-level raw parameters
+    vector<lower=0, upper=1>[N]  A;
+    vector<lower=0, upper=2>[N]  alpha;
+    vector<lower=0, upper=5>[N]  cons;
+    vector<lower=0, upper=10>[N] lambda;
+
+    for (i in 1:N) {
+      {{main_chunk$A}}
+      {{main_chunk$alpha}}
+      {{main_chunk$cons}}
+      {{main_chunk$lambda}}
+    }
+  }
+  model {
+    // Hyperparameters
+    mu_pr  ~ normal(0, 1);
+    sigma  ~ normal(0, 0.2);
+
+    // Regression parameters
+    for (i in 1:{{npars}}) {
+      sigma_beta[i] ~ exponential(covariate_precisions[i]);
+      beta[i] ~ normal(0, sigma_beta[i]);
+    }
+
+    // individual parameters
+    A_pr      ~ normal(0, 1);
+    alpha_pr  ~ normal(0, 1);
+    cons_pr   ~ normal(0, 1);
+    lambda_pr ~ normal(0, 1);
+
+    for (i in 1:N) {
+      // Define values
+      vector[4] ev;
+      real curUtil;     // utility of curFb
+      real theta;       // theta = 3^c - 1
+
+      // Initialize values
+      theta = pow(3, cons[i]) -1;
+      ev = initV; // initial ev values
+
+      for (t in 1:Tsubj[i]) {
+        // softmax choice
+        choice[i, t] ~ categorical_logit(theta * ev);
+
+        if (outcome[i, t] >= 0) {  // x(t) >= 0
+          curUtil = pow(outcome[i, t], alpha[i]);
+        } else {                  // x(t) < 0
+          curUtil = -1 * lambda[i] * pow(-1 * outcome[i, t], alpha[i]);
+        }
+
+        #DELTA CHANGES
+        #// decay-RI
+        #ev *= A[i];
+        #ev[choice[i, t]] += curUtil;
+
+        // delta
+        ev[choice[i, t]] += A[i] * (curUtil - ev[choice[i, t]]);
+      }
+    }
+  }
+  generated quantities {
+    // For group level parameters
+    real<lower=0, upper=1>  mu_A;
+    real<lower=0, upper=2>  mu_alpha;
+    real<lower=0, upper=5>  mu_cons;
+    real<lower=0, upper=10> mu_lambda;
+
+    // For log likelihood calculation
+    real log_lik[N];
+
+    // For posterior predictive check
+    real y_pred[N, T];
+
+    // Set all posterior predictions to 0 (avoids NULL values)
+    for (i in 1:N) {
+      for (t in 1:T) {
+        y_pred[i, t] = -1;
+      }
+    }
+
+    mu_A      = Phi_approx(mu_pr[1]);
+    mu_alpha  = Phi_approx(mu_pr[2]) * 2;
+    mu_cons   = Phi_approx(mu_pr[3]) * 5;
+    mu_lambda = Phi_approx(mu_pr[4]) * 10;
+
+    { // local section, this saves time and space
+      for (i in 1:N) {
+        // Define values
+        vector[4] ev;
+        real curUtil;     // utility of curFb
+        real theta;       // theta = 3^c - 1
+
+        // Initialize values
+        log_lik[i] = 0;
+        theta = pow(3, cons[i]) -1;
+        ev = initV; // initial ev values
+
+        for (t in 1:Tsubj[i]) {
+          // softmax choice
+          log_lik[i] += categorical_logit_lpmf(choice[i, t] | theta * ev);
+
+          // generate posterior prediction for current trial
+          y_pred[i, t] = categorical_rng(softmax(theta * ev));
+
+          if (outcome[i, t] >= 0) {  // x(t) >= 0
+            curUtil = pow(outcome[i, t], alpha[i]);
+          } else {                  // x(t) < 0
+            curUtil = -1 * lambda[i] * pow(-1 * outcome[i, t], alpha[i]);
+          }
+
+          #DELTA CHANGE
+          #// decay-RI
+          #ev *= A[i];
+          #ev[choice[i, t]] += curUtil;
+
+          // delta
+          ev[choice[i, t]] += A[i] * (curUtil - ev[choice[i, t]]);
         }
       }
     }
